@@ -1,0 +1,59 @@
+﻿@page
+@using Application.Users
+@model WebApp.Pages.Users.DetailsModel
+@{
+    string pageTitle = "User Details";
+    if (Model.RequestId == null)
+    {
+        pageTitle = "My Details";
+    }
+    ViewData["Title"] = pageTitle;
+}
+
+<div class="container">
+    <h3>@pageTitle</h3>
+
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>Name</td>
+            <td>@Model.CUser.Username</td>
+        </tr>
+        <tr>
+            <td>DisplayName</td>
+            <td>@Model.CUser.DisplayName</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>@Model.CUser.Email</td>
+        </tr>
+        <tr>
+            <td>Phone</td>
+            <td>@Model.CUser.PhoneNumber</td>
+        </tr>
+        <tr>
+            <td>Role</td>
+            <td>@Model.CUser.UserRole</td>
+        </tr>
+        <tr>
+            <td>Two Factor Enabled?</td>
+            <td>@(Model.CUser.TwoFactorEnabled?"Yes":"No")</td>
+        </tr>
+        <tr>
+            <td>Active?</td>
+            <td>@(Model.CUser.IsActive?"Yes":"No")</td>
+        </tr>
+    </table>
+
+    @if (Model.RequestId != null && User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+        // admin user is seeing other user details, so show extra buttons
+        <div>
+            <a asp-page="./Edit" asp-route-id="@Model.RequestId" class="btn btn-sm btn-outline-warning">Edit User</a>
+            <a asp-page="./Delete" asp-route-id="@Model.RequestId" class="btn btn-sm btn-outline-danger">Delete User</a>
+        </div>
+        <br />
+        <div>
+            <a asp-page="Index">Back to Users List</a>
+        </div>
+    }
+</div>

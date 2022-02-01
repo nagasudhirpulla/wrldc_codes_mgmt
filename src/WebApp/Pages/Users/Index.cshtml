@@ -1,0 +1,126 @@
+﻿@page
+@model WebApp.Pages.Users.IndexModel
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+@if (Model != null && Model.Users != null)
+{
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-12">
+            <h2>@ViewData["Title"]</h2>
+            <hr />
+            <p>
+                <a asp-page="./Create" class="btn btn-sm btn-success">Create User</a>
+            </p>
+            <br />
+            <table class="table table-bordered table-hover display" id="display_table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>DisplayName</th>
+                        <th>Application Role</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>IsActive?</th>
+                        <th>Two Factor?</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model.Users)
+                    {
+                        <tr>
+                            <td>@user.Username</td>
+                            <td>@user.DisplayName</td>
+                            <td>@user.UserRole</td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>@Html.DisplayFor(modelItem => user.IsActive)</td>
+                            <td>@Html.DisplayFor(modelItem => user.TwoFactorEnabled)</td>
+                            <td>
+                                <a asp-page="./Details" asp-route-id="@user.UserId">Details</a> |
+                                <a asp-page="./Edit" asp-route-id="@user.UserId">Edit</a> |
+                                <a asp-page="./Delete" asp-route-id="@user.UserId">Delete</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Username</th>
+                        <th>DisplayName</th>
+                        <th>Application Role</th>
+                        <th>Email</th>
+                        <th>PhoneNumber</th>
+                        <th>IsActive?</th>
+                        <th>Two Factor?</th>
+                        <th>Actions</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+
+    @section Scripts{
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css" />
+<script src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/js/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/js/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script>
+    function strtrunc(str, max, add) {
+        add = add || '...';
+        return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
+    $(document).ready(function () {
+        // https://datatables.net/examples/api/multi_filter.html
+        // Setup - add a text input to each footer cell
+        $('#display_table tfoot th').each(function () {
+            //var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search" />');
+        });
+        var display_table = $('#display_table').DataTable({
+            fixedHeader: true,
+            "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            "order": [[0, "asc"]],
+            buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']
+        });
+        var r = $('#display_table tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', '3px');
+        });
+        $('#display_table thead').append(r);
+        // Apply the filter
+        // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+        $("#display_table thead input").on('keyup change', function () {
+            display_table
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+    });
+</script>
+<style>
+    thead input {
+        padding: 2px;
+        box-sizing: border-box;
+        font-size: small;
+        width: 100%
+    }
+</style>
+    }
+}
