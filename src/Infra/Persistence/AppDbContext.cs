@@ -4,7 +4,7 @@ using System.Reflection;
 using Application.Common.Interfaces;
 using Core.Common;
 using Core.Entities;
-using SmartEnum.EFCore;
+using Infra.SmartEnum.EFCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infra.Persistence;
@@ -24,8 +24,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ConfigureSmartEnum();
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ConfigureSmartEnum();
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

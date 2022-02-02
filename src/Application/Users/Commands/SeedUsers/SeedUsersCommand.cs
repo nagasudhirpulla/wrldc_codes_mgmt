@@ -38,8 +38,6 @@ public class SeedUsersCommand : IRequest<bool>
             //int desigId = (await _context.Designations.Where(d => d.Name.ToLower() == "na").FirstAsync()).Id;
             await SeedUser(_identityInit.AdminUserName, _identityInit.AdminEmail,
                 _identityInit.AdminPassword, SecurityConstants.AdminRoleString);
-            await SeedUser(_identityInit.GuestUserName, _identityInit.GuestEmail,
-                _identityInit.GuestPassword, SecurityConstants.StakeholderRoleString);
         }
 
         /**
@@ -54,6 +52,7 @@ public class SeedUsersCommand : IRequest<bool>
                 ApplicationUser user = new()
                 {
                     UserName = userName,
+                    DisplayName = userName,
                     Email = email,
                 };
 
