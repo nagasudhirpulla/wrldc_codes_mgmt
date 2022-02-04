@@ -40,7 +40,7 @@ public class SendCodeModel : PageModel
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Send Login Code Via")]
-        public string Provider { get; set; }
+        public string? Provider { get; set; }
     }
 
     public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)

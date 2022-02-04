@@ -32,7 +32,7 @@ public class VerifyCodeModel : PageModel
         [Required]
         [DataType(DataType.Text)]
         [Display(Name = "Please enter the login code")]
-        public string LoginCode { get; set; }
+        public string? LoginCode { get; set; }
 
         [Display(Name = "Remember this machine")]
         public bool RememberMachine { get; set; }

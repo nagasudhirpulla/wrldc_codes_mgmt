@@ -12,5 +12,8 @@ class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder.Property(b => b.UserName)
            .IsRequired();
 
+        builder.Property(b => b.DisplayName)
+           .IsRequired();
+
     }
 }

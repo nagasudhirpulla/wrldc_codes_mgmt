@@ -9,7 +9,7 @@ namespace Application.Users.Queries.GetUserById;
 
 public class GetUserByIdQuery : IRequest<UserDTO>
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDTO>
     {
         private readonly UserManager<ApplicationUser> _userManager;

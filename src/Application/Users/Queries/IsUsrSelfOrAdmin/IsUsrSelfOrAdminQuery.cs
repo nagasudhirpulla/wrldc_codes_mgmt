@@ -7,7 +7,7 @@ namespace Application.Users.Queries.IsUsrSelfOrAdmin;
 
 public class IsUsrSelfOrAdminQuery : IRequest<bool>
 {
-    public string UsrId { get; set; }
+    public string? UsrId { get; set; }
     public class IsUsrSelfOrAdminQueryHandler : IRequestHandler<IsUsrSelfOrAdminQuery, bool>
     {
         private readonly ICurrentUserService _currentUserService;

@@ -31,7 +31,7 @@ public partial class IndexModel : PageModel
     {
         [Phone]
         [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
     }
 
     private async Task LoadAsync(ApplicationUser user)

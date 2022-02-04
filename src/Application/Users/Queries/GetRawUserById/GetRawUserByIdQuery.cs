@@ -6,7 +6,7 @@ namespace Application.Users.Queries.GetRawUserById;
 
 public class GetRawUserByIdQuery : IRequest<ApplicationUser>
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
     public class GetRawAppUserByIdQueryHandler : IRequestHandler<GetRawUserByIdQuery, ApplicationUser>
     {
         private readonly UserManager<ApplicationUser> _userManager;

@@ -2,5 +2,5 @@
 
 public class UserListVM
 {
-    public IList<UserDTO> Users { get; set; }
+    public IList<UserDTO>? Users { get; set; }
 }
