@@ -9,12 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "4.7.0",
     "bootstrap": "^5.1.3",
     "datatables.net": "^1.11.3",
     "datatables.net-bs5": "^1.11.4",
     "datatables.net-buttons-dt": "^1.6.4",
     "datatables.net-dt": "^1.11.3",
     "datatables.net-fixedheader": "^3.2.0",
+    "font-awesome": "^4.7.0",
     "jquery": "^3.5.1",
     "jszip": "^3.5.0",
     "pdfmake": "^0.1.68"

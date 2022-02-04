@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\js\node_modules\%40fortawesome\**" />
+    <Content Remove="wwwroot\js\node_modules\%40fortawesome\**" />
+    <EmbeddedResource Remove="wwwroot\js\node_modules\%40fortawesome\**" />
+    <None Remove="wwwroot\js\node_modules\%40fortawesome\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\js\node_modules\datatables.net-bs5\css\dataTables.bootstrap5.min.css" />
+    <Content Include="wwwroot\js\node_modules\font-awesome\css\font-awesome.min.css" />
   </ItemGroup>
 
   <ItemGroup>

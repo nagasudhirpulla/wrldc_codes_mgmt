@@ -48,12 +48,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="UpUser.IsActive"></label>
-                <input asp-for="UpUser.IsActive" class="form-control" />
+                <input asp-for="UpUser.IsActive" />
                 <span asp-validation-for="UpUser.IsActive" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UpUser.IsTwoFactorEnabled"></label>
-                <input asp-for="UpUser.IsTwoFactorEnabled" class="form-control" />
+                <input asp-for="UpUser.IsTwoFactorEnabled" />
                 <span asp-validation-for="UpUser.IsTwoFactorEnabled" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-success">Save Changes</button>

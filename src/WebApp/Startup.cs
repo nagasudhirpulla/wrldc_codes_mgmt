@@ -26,8 +26,7 @@ public class Startup
         services.AddApplication();
         services.AddInfrastructure(Configuration, Environment);
         services.AddRazorPages()
-            .AddMvcOptions(o => o.Filters.Add(new AuthorizeFilter()))
-            .AddRazorRuntimeCompilation();
+            .AddMvcOptions(o => o.Filters.Add(new AuthorizeFilter()));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
