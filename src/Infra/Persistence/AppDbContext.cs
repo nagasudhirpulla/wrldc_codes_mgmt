@@ -21,10 +21,16 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
         _domainEventService = domainEventService;
     }
 
+    public DbSet<UserStakeholder> UserStakeholders { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        foreach (var property in builder.Model.GetEntityTypes()
+                 .SelectMany(t => t.GetProperties())
+                 .Where(p => p.ClrType == typeof(DateTime) || p.ClrType == typeof(DateTime?)))
+            property.SetColumnType("timestamp without time zone");
         builder.ConfigureSmartEnum();
     }
 

@@ -27,6 +27,11 @@
                 <span asp-validation-for="UpUser.UserRole" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="SelectedStakeHolderIds"></label>
+                <select asp-for="SelectedStakeHolderIds" class="form-control" asp-items="Model.StakeholderOptions"></select>
+                <span asp-validation-for="SelectedStakeHolderIds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="UpUser.Email"></label>
                 <input asp-for="UpUser.Email" class="form-control" />
                 <span asp-validation-for="UpUser.Email" class="text-danger"></span>

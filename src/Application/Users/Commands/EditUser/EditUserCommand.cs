@@ -2,6 +2,7 @@
 using MediatR;
 using Core.Entities;
 using static Application.Common.Mappings.MappingProfile;
+using Core.ReportingData;
 
 namespace Application.Users.Commands.EditUser;
 
@@ -17,6 +18,7 @@ public class EditUserCommand : IRequest<List<string>>, IMapFrom<ApplicationUser>
     public string? UserRole { get; set; }
     public bool IsActive { get; set; }
     public bool IsTwoFactorEnabled { get; set; }
+    public List<ReportingStakeholder>? Stakeholders { get; set; }
 
     public void Mapping(Profile profile)
     {

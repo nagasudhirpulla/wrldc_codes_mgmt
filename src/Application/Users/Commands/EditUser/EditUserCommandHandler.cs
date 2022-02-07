@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Core.Entities;
+using Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Commands.EditUser;
 
@@ -9,11 +11,13 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand, List<stri
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<EditUserCommandHandler> _logger;
+    private readonly IAppDbContext _context;
 
-    public EditUserCommandHandler(UserManager<ApplicationUser> userManager, ILogger<EditUserCommandHandler> logger)
+    public EditUserCommandHandler(UserManager<ApplicationUser> userManager, ILogger<EditUserCommandHandler> logger, IAppDbContext appDbContext)
     {
         _userManager = userManager;
         _logger = logger;
+        _context = appDbContext;
     }
 
     public async Task<List<string>> Handle(EditUserCommand request, CancellationToken cancellationToken)
@@ -121,6 +125,46 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand, List<stri
         {
             // TODO log this
             identityErrors.AddRange(updateRes.Errors);
+        }
+
+        // update the user stakeholders
+        if (request.Stakeholders != null)
+        {
+            var updatedStakeholderIds = request.Stakeholders.Select(x => x.Id);
+
+            // get existing stakeholders
+            List<UserStakeholder> existingStakeholders = await _context.UserStakeholders.Where(uS => uS.UsrId == user.Id).ToListAsync(cancellationToken: cancellationToken);
+            var existingStakeholderIds = existingStakeholders.Select(x => x.StakeHolderId);
+
+            // find the user stakeholders to be inserted
+            List<UserStakeholder> newUserStakeholders = new();
+            foreach (var s in request.Stakeholders)
+            {
+                if (!existingStakeholderIds.Contains(s.Id))
+                {
+                    newUserStakeholders.Add(new UserStakeholder()
+                    {
+                        UsrId = user.Id,
+                        StakeHolderId = s.Id,
+                        StakeHolderName = s.Username
+                    });
+                }
+            }
+
+            // find the user stakeholders to be deleted
+            List<UserStakeholder> toDeleteUserStakeholders = new();
+            foreach (var e in existingStakeholders)
+            {
+                if (!updatedStakeholderIds.Contains(e.StakeHolderId))
+                {
+                    toDeleteUserStakeholders.Add(e);
+                }
+            }
+
+            // persist the updates on user stakeholders
+            _context.UserStakeholders.AddRange(newUserStakeholders);
+            _context.UserStakeholders.RemoveRange(toDeleteUserStakeholders);
+            _ = await _context.SaveChangesAsync(cancellationToken);
         }
 
         foreach (IdentityError iError in identityErrors)

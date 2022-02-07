@@ -28,6 +28,7 @@ public class GetUserByIdQuery : IRequest<UserDTO>
                 return null;
             }
             ApplicationUser user = await _userManager.Users
+                                    .Include(x => x.Stakeholders)
                                     .SingleAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
             if (user == null)
             {

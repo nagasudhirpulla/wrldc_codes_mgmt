@@ -18,7 +18,7 @@ public class GetStakeholdersQuery : IRequest<List<ReportingStakeholder>>
         public async Task<List<ReportingStakeholder>> Handle(GetStakeholdersQuery request, CancellationToken cancellationToken)
         {
             List<ReportingStakeholder> stakeholders = _reportingService.GetReportingStakeHolders();
-            return stakeholders;
+            return await Task.FromResult(stakeholders);
         }
     }
 }

@@ -11,6 +11,9 @@ using Application.Users.Commands.EditUser;
 using Application.Users.Queries.GetRawUserById;
 using Core.Entities;
 using WebApp.Extensions;
+using Application.ReportingData.Queries.GetStakeholders;
+using Application.UserStakeHolders.Queries.GetUserStakeholders;
+using Core.ReportingData;
 
 namespace WebApp.Pages.Users;
 
@@ -33,6 +36,12 @@ public class EditModel : PageModel
 
     public SelectList URoles { get; set; }
 
+
+    public MultiSelectList StakeholderOptions { get; set; }
+
+    [BindProperty]
+    public int[] SelectedStakeHolderIds { get; set; }
+
     public async Task<IActionResult> OnGetAsync(string id)
     {
         if (id == null)
@@ -48,14 +57,20 @@ public class EditModel : PageModel
 
         UpUser = _mapper.Map<EditUserCommand>(user);
 
-        InitSelectListItems();
+        List<ReportingStakeholder> allStakeholders = await _mediator.Send(new GetStakeholdersQuery());
+        List<UserStakeholder> existingStakeholders = await _mediator.Send(new GetUserStakeholdersQuery() { UsrId = user.Id });
+        SelectedStakeHolderIds = existingStakeholders.Select(i => i.StakeHolderId).ToArray();
+
+        InitSelectListItems(allStakeholders, existingStakeholders);
 
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        InitSelectListItems();
+        List<ReportingStakeholder> allStakeholders = await _mediator.Send(new GetStakeholdersQuery());
+        List<UserStakeholder> existingStakeholders = await _mediator.Send(new GetUserStakeholdersQuery() { UsrId = UpUser.Id });
+        InitSelectListItems(allStakeholders, existingStakeholders);
 
         ValidationResult validationCheck = new EditUserCommandValidator().Validate(UpUser);
         validationCheck.AddToModelState(ModelState, nameof(UpUser));
@@ -64,6 +79,9 @@ public class EditModel : PageModel
         {
             return Page();
         }
+
+        // set the updated stakeholders in the command
+        UpUser.Stakeholders = allStakeholders.Where(x => SelectedStakeHolderIds.Contains(x.Id)).ToList();
 
         List<string> errors = await _mediator.Send(UpUser);
 
@@ -82,8 +100,19 @@ public class EditModel : PageModel
         return Page();
     }
 
-    public void InitSelectListItems()
+    public void InitSelectListItems(List<ReportingStakeholder> allStakeholders, List<UserStakeholder> existingStakeholders)
     {
         URoles = new SelectList(SecurityConstants.GetRoles());
+
+        List<ReportingStakeholder> stakeholderOptions = new(allStakeholders);
+        // make sure existing stakeholders are present in the select list
+        foreach (var eS in existingStakeholders)
+        {
+            if (!stakeholderOptions.Any(x => x.Id.Equals(eS.StakeHolderId)))
+            {
+                stakeholderOptions.Add(new ReportingStakeholder(eS.StakeHolderId, eS.StakeHolderName ?? eS.Id.ToString()));
+            }
+        }
+        StakeholderOptions = new MultiSelectList(stakeholderOptions, "Id", "Username", existingStakeholders.Select(x => x.StakeHolderId));
     }
 }
