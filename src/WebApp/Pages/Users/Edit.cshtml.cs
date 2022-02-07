@@ -70,6 +70,17 @@ public class EditModel : PageModel
     {
         List<ReportingStakeholder> allStakeholders = await _mediator.Send(new GetStakeholdersQuery());
         List<UserStakeholder> existingStakeholders = await _mediator.Send(new GetUserStakeholdersQuery() { UsrId = UpUser.Id });
+
+        // make sure that existing stakeholders are present in all stakeholders
+        var allStakeholderIds = allStakeholders.Select(x => x.Id);
+        foreach (var eS in existingStakeholders)
+        {
+            if (!allStakeholderIds.Contains(eS.StakeHolderId))
+            {
+                allStakeholders.Add(new ReportingStakeholder(eS.StakeHolderId, eS.StakeHolderName ?? eS.StakeHolderId.ToString()));
+            }
+        }
+
         InitSelectListItems(allStakeholders, existingStakeholders);
 
         ValidationResult validationCheck = new EditUserCommandValidator().Validate(UpUser);
