@@ -15,6 +15,8 @@ using DNTCaptcha.Core;
 using Infra.Services;
 using Infra.Sms;
 using Infra.Email;
+using Infra.ReportingData;
+using Core.ReportingData;
 
 namespace Infra;
 
@@ -60,9 +62,9 @@ public static class DependencyInjection
 
         services.ConfigureApplicationCookie(options =>
         {
-                // configure login path for return urls
-                // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0#cookie-settings
-                options.LoginPath = "/Identity/Account/Login";
+            // configure login path for return urls
+            // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0#cookie-settings
+            options.LoginPath = "/Identity/Account/Login";
             options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             options.SlidingExpiration = true;
             options.ExpireTimeSpan = TimeSpan.FromMinutes(sessionCookieLifetimeMins);
@@ -86,17 +88,18 @@ public static class DependencyInjection
         // Add Infra services
         services.AddTransient<IEmailSender, EmailSender>();
         services.AddTransient<ISmsSender, SmsSender>();
+        services.AddTransient<IReportingDataService, ReportingDataService>();
 
         services.AddDNTCaptcha(options =>
         {
-                // options.UseSessionStorageProvider(); // -> It doesn't rely on the server or client's times. Also it's the safest one.
-                // options.UseMemoryCacheStorageProvider(); // -> It relies on the server's times. It's safer than the CookieStorageProvider.
-                options.UseCookieStorageProvider() // -> It relies on the server and client's times. It's ideal for scalability, because it doesn't save anything in the server's memory.
-            .ShowThousandsSeparators(false)
-            .WithEncryptionKey(Guid.NewGuid().ToString());
-                // options.UseDistributedCacheStorageProvider(); // --> It's ideal for scalability using `services.AddStackExchangeRedisCache()` for instance.
-                // options.UseDistributedSerializationProvider();
-            });
+            // options.UseSessionStorageProvider(); // -> It doesn't rely on the server or client's times. Also it's the safest one.
+            // options.UseMemoryCacheStorageProvider(); // -> It relies on the server's times. It's safer than the CookieStorageProvider.
+            options.UseCookieStorageProvider() // -> It relies on the server and client's times. It's ideal for scalability, because it doesn't save anything in the server's memory.
+        .ShowThousandsSeparators(false)
+        .WithEncryptionKey(Guid.NewGuid().ToString());
+            // options.UseDistributedCacheStorageProvider(); // --> It's ideal for scalability using `services.AddStackExchangeRedisCache()` for instance.
+            // options.UseDistributedSerializationProvider();
+        });
 
         return services;
     }

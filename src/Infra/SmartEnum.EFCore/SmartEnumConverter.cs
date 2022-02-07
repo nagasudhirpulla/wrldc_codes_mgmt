@@ -1,6 +1,5 @@
 ﻿using Ardalis.SmartEnum;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
 using System.Reflection;
 
 namespace Infra.SmartEnum.EFCore;

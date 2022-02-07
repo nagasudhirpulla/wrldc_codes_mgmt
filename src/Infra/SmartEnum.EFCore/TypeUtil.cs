@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Infra.SmartEnum.EFCore;
+﻿namespace Infra.SmartEnum.EFCore;
 internal static class TypeUtil
 {
     public static bool IsDerived(Type objectType, Type mainType)
