@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\node_modules\chosen-js\chosen.jquery.min.js" />
     <None Include="wwwroot\js\node_modules\datatables.net-bs5\js\dataTables.bootstrap5.min.js" />
   </ItemGroup>
 
