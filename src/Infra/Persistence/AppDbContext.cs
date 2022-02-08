@@ -22,6 +22,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
     }
 
     public DbSet<UserStakeholder> UserStakeholders { get; set; }
+    public DbSet<UserElementOwner> UserElementOwners { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -9,4 +9,5 @@ public class ApplicationUser : IdentityUser
     public bool IsActive { get; set; } = true;
 
     public IList<UserStakeholder> Stakeholders { get; private set; } = new List<UserStakeholder>();
+    public IList<UserElementOwner> ElementOwners { get; private set; } = new List<UserElementOwner>();
 }

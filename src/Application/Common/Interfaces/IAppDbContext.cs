@@ -12,4 +12,5 @@ public interface IAppDbContext
     EntityEntry Update([NotNullAttribute] object entity);
 
     DbSet<UserStakeholder> UserStakeholders { get; set; }
+    DbSet<UserElementOwner> UserElementOwners { get; set; }
 }

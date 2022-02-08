@@ -27,4 +27,11 @@ public class ReportingDataServiceTests
         List<ReportingStakeholder> stakeholders = _reportingDataService.GetReportingStakeHolders();
         Assert.IsTrue(stakeholders.Count > 0);
     }
+
+    [TestMethod()]
+    public void GetReportingOwnersTest()
+    {
+        List<ReportingOwner> owners = _reportingDataService.GetReportingOwners();
+        Assert.IsTrue(owners.Count > 0);
+    }
 }

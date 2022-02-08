@@ -19,6 +19,7 @@ public class EditUserCommand : IRequest<List<string>>, IMapFrom<ApplicationUser>
     public bool IsActive { get; set; }
     public bool IsTwoFactorEnabled { get; set; }
     public List<ReportingStakeholder>? Stakeholders { get; set; }
+    public List<ReportingOwner>? ElementOwners { get; set; }
 
     public void Mapping(Profile profile)
     {

@@ -48,4 +48,19 @@ public class ReportingDataService : IReportingDataService
         }
         return stakeholders;
     }
+
+    public List<ReportingOwner> GetReportingOwners()
+    {
+        List<ReportingOwner> owners;
+        try
+        {
+            owners = GetReportingOwnersQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting data owners, {msg}", ex.Message);
+            owners = new();
+        }
+        return owners;
+    }
 }

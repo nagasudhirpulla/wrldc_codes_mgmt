@@ -30,6 +30,7 @@ public class GetAppUsersQuery : IRequest<UserListVM>
             // get the list of users
             List<ApplicationUser> users = await _userManager.Users
                                             .Include(u => u.Stakeholders)
+                                            .Include(u => u.ElementOwners)
                                             .OrderBy(u => u.UserName)
                                             .ToListAsync(cancellationToken: cancellationToken);
             foreach (ApplicationUser user in users)

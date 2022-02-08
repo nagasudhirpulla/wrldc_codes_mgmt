@@ -3,4 +3,5 @@
 public interface IReportingDataService
 {
     List<ReportingStakeholder> GetReportingStakeHolders();
+    List<ReportingOwner> GetReportingOwners();
 }

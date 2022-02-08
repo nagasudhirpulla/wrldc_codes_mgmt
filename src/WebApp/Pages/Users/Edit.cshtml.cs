@@ -14,6 +14,8 @@ using WebApp.Extensions;
 using Application.ReportingData.Queries.GetStakeholders;
 using Application.UserStakeHolders.Queries.GetUserStakeholders;
 using Core.ReportingData;
+using Application.ReportingData.Queries.GetReportingOwners;
+using Application.UserElementOwners.Queries.GetUserElementOwners;
 
 namespace WebApp.Pages.Users;
 
@@ -42,6 +44,12 @@ public class EditModel : PageModel
     [BindProperty]
     public int[] SelectedStakeHolderIds { get; set; }
 
+
+    public MultiSelectList ElementOwnerOptions { get; set; }
+
+    [BindProperty]
+    public int[] SelectedElementOwnerIds { get; set; }
+
     public async Task<IActionResult> OnGetAsync(string id)
     {
         if (id == null)
@@ -61,7 +69,11 @@ public class EditModel : PageModel
         List<UserStakeholder> existingStakeholders = await _mediator.Send(new GetUserStakeholdersQuery() { UsrId = user.Id });
         SelectedStakeHolderIds = existingStakeholders.Select(i => i.StakeHolderId).ToArray();
 
-        InitSelectListItems(allStakeholders, existingStakeholders);
+        List<ReportingOwner> allElementOwners = await _mediator.Send(new GetOwnersQuery());
+        List<UserElementOwner> existingElementOwners = await _mediator.Send(new GetUserElementOwnersQuery() { UsrId = user.Id });
+        SelectedElementOwnerIds = existingElementOwners.Select(i => i.OwnerId).ToArray();
+
+        InitSelectListItems(allStakeholders, existingStakeholders, allElementOwners, existingElementOwners);
 
         return Page();
     }
@@ -81,7 +93,20 @@ public class EditModel : PageModel
             }
         }
 
-        InitSelectListItems(allStakeholders, existingStakeholders);
+        List<ReportingOwner> allElementOwners = await _mediator.Send(new GetOwnersQuery());
+        List<UserElementOwner> existingElementOwners = await _mediator.Send(new GetUserElementOwnersQuery() { UsrId = UpUser.Id });
+
+        // make sure that existing element-owners are present in all element-owners
+        var allElementOwnerIds = allElementOwners.Select(x => x.Id);
+        foreach (var eO in existingElementOwners)
+        {
+            if (!allElementOwnerIds.Contains(eO.OwnerId))
+            {
+                allElementOwners.Add(new ReportingOwner(eO.OwnerId, eO.OwnerName ?? eO.OwnerId.ToString()));
+            }
+        }
+
+        InitSelectListItems(allStakeholders, existingStakeholders, allElementOwners, existingElementOwners);
 
         ValidationResult validationCheck = new EditUserCommandValidator().Validate(UpUser);
         validationCheck.AddToModelState(ModelState, nameof(UpUser));
@@ -93,6 +118,9 @@ public class EditModel : PageModel
 
         // set the updated stakeholders in the command
         UpUser.Stakeholders = allStakeholders.Where(x => SelectedStakeHolderIds.Contains(x.Id)).ToList();
+
+        // set the updated element owners in the command
+        UpUser.ElementOwners = allElementOwners.Where(x => SelectedElementOwnerIds.Contains(x.Id)).ToList();
 
         List<string> errors = await _mediator.Send(UpUser);
 
@@ -111,7 +139,7 @@ public class EditModel : PageModel
         return Page();
     }
 
-    public void InitSelectListItems(List<ReportingStakeholder> allStakeholders, List<UserStakeholder> existingStakeholders)
+    public void InitSelectListItems(List<ReportingStakeholder> allStakeholders, List<UserStakeholder> existingStakeholders, List<ReportingOwner> allElementOwners, List<UserElementOwner> existingElementOwners)
     {
         URoles = new SelectList(SecurityConstants.GetRoles());
 
@@ -121,9 +149,20 @@ public class EditModel : PageModel
         {
             if (!stakeholderOptions.Any(x => x.Id.Equals(eS.StakeHolderId)))
             {
-                stakeholderOptions.Add(new ReportingStakeholder(eS.StakeHolderId, eS.StakeHolderName ?? eS.Id.ToString()));
+                stakeholderOptions.Add(new ReportingStakeholder(eS.StakeHolderId, eS.StakeHolderName ?? eS.StakeHolderId.ToString()));
             }
         }
         StakeholderOptions = new MultiSelectList(stakeholderOptions, "Id", "Username", existingStakeholders.Select(x => x.StakeHolderId));
+
+        List<ReportingOwner> elementOwnerOptions = new(allElementOwners);
+        // make sure existing element-owners are present in the select list
+        foreach (var eO in existingElementOwners)
+        {
+            if (!elementOwnerOptions.Any(x => x.Id.Equals(eO.OwnerId)))
+            {
+                elementOwnerOptions.Add(new ReportingOwner(eO.OwnerId, eO.OwnerName ?? eO.OwnerId.ToString()));
+            }
+        }
+        ElementOwnerOptions = new MultiSelectList(elementOwnerOptions, nameof(ReportingOwner.Id), nameof(ReportingOwner.Name), existingElementOwners.Select(x => x.OwnerId));
     }
 }

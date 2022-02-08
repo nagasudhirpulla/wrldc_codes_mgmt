@@ -133,37 +133,59 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand, List<stri
             var updatedStakeholderIds = request.Stakeholders.Select(x => x.Id);
 
             // get existing stakeholders
-            List<UserStakeholder> existingStakeholders = await _context.UserStakeholders.Where(uS => uS.UsrId == user.Id).ToListAsync(cancellationToken: cancellationToken);
+            List<UserStakeholder> existingStakeholders = await _context.UserStakeholders.Where(uS => uS.UsrId == user.Id)
+                                                                .ToListAsync(cancellationToken: cancellationToken);
             var existingStakeholderIds = existingStakeholders.Select(x => x.StakeHolderId);
 
             // find the user stakeholders to be inserted
-            List<UserStakeholder> newUserStakeholders = new();
-            foreach (var s in request.Stakeholders)
-            {
-                if (!existingStakeholderIds.Contains(s.Id))
-                {
-                    newUserStakeholders.Add(new UserStakeholder()
-                    {
-                        UsrId = user.Id,
-                        StakeHolderId = s.Id,
-                        StakeHolderName = s.Username
-                    });
-                }
-            }
+            List<UserStakeholder> newUserStakeholders = request.Stakeholders
+                                                        .Where(x => !existingStakeholderIds.Contains(x.Id))
+                                                        .Select(x => new UserStakeholder()
+                                                        {
+                                                            UsrId = user.Id,
+                                                            StakeHolderId = x.Id,
+                                                            StakeHolderName = x.Username
+                                                        }).ToList();
+
 
             // find the user stakeholders to be deleted
-            List<UserStakeholder> toDeleteUserStakeholders = new();
-            foreach (var e in existingStakeholders)
-            {
-                if (!updatedStakeholderIds.Contains(e.StakeHolderId))
-                {
-                    toDeleteUserStakeholders.Add(e);
-                }
-            }
+            List<UserStakeholder> toDeleteUserStakeholders = existingStakeholders
+                                                            .Where(x => !updatedStakeholderIds.Contains(x.StakeHolderId))
+                                                            .ToList();
 
             // persist the updates on user stakeholders
             _context.UserStakeholders.AddRange(newUserStakeholders);
             _context.UserStakeholders.RemoveRange(toDeleteUserStakeholders);
+            _ = await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        // update the user element owners
+        if (request.ElementOwners != null)
+        {
+            var updatedElemOwnerIds = request.ElementOwners.Select(x => x.Id);
+
+            // get existing element-owners
+            List<UserElementOwner> existingElemOwners = await _context.UserElementOwners.Where(uS => uS.UsrId == user.Id)
+                                                                .ToListAsync(cancellationToken: cancellationToken);
+            var existingElemOwnerIds = existingElemOwners.Select(x => x.OwnerId);
+
+            // find the user element-owners to be inserted
+            List<UserElementOwner> newUserElemOwners = request.ElementOwners
+                                                        .Where(x=> !existingElemOwnerIds.Contains(x.Id))
+                                                        .Select(x=> new UserElementOwner()
+                                                        {
+                                                            UsrId = user.Id,
+                                                            OwnerId = x.Id,
+                                                            OwnerName = x.Name
+                                                        }).ToList();
+            
+            // find the user element-owners to be deleted
+            List<UserElementOwner> toDeleteUserElemOwners = existingElemOwners
+                                                            .Where(x=> !updatedElemOwnerIds.Contains(x.OwnerId))
+                                                            .ToList();
+            // persist the updates on user stakeholders
+            _context.UserElementOwners.AddRange(newUserElemOwners);
+            _context.UserElementOwners.RemoveRange(toDeleteUserElemOwners);
             _ = await _context.SaveChangesAsync(cancellationToken);
         }
 

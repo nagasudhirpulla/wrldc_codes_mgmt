@@ -1,33 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Infra.Migrations
 {
-    public partial class stakeholders : Migration
+    public partial class elemOwner : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserStakeholder",
+                name: "UserElementOwners",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    StakeHolderId = table.Column<int>(type: "integer", nullable: false),
-                    StakeHolderName = table.Column<string>(type: "text", nullable: false),
+                    OwnerId = table.Column<int>(type: "integer", nullable: false),
+                    OwnerName = table.Column<string>(type: "text", nullable: false),
                     UsrId = table.Column<string>(type: "text", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserStakeholder", x => x.Id);
+                    table.PrimaryKey("PK_UserElementOwners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserStakeholder_AspNetUsers_UsrId",
+                        name: "FK_UserElementOwners_AspNetUsers_UsrId",
                         column: x => x.UsrId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -35,21 +36,21 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserStakeholder_StakeHolderId_UsrId",
-                table: "UserStakeholder",
-                columns: new[] { "StakeHolderId", "UsrId" },
+                name: "IX_UserElementOwners_OwnerId_UsrId",
+                table: "UserElementOwners",
+                columns: new[] { "OwnerId", "UsrId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserStakeholder_UsrId",
-                table: "UserStakeholder",
+                name: "IX_UserElementOwners_UsrId",
+                table: "UserElementOwners",
                 column: "UsrId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserStakeholder");
+                name: "UserElementOwners");
         }
     }
 }
