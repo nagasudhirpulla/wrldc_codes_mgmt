@@ -1,5 +1,4 @@
-﻿using Infra.ReportingData;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using WebApp;
@@ -38,11 +37,10 @@ public class ReportingDataServiceTests
     }
 
     [TestMethod()]
-    public void GetRequesterApprovedOutageRequestsForDateTest()
+    public void GetApprovedOutageRequestsForDateTest()
     {
         DateTime inpDate = DateTime.Now;
-        int requesterId = 131;
-        List<ReportingOutageRequest> outageRequests = _reportingDataService.GetRequesterApprovedOutageRequestsForDate(requesterId, inpDate);
+        List<ReportingOutageRequest> outageRequests = _reportingDataService.GetApprovedOutageRequestsForDate(inpDate);
         Assert.IsTrue(outageRequests.Count > 0);
     }
 }

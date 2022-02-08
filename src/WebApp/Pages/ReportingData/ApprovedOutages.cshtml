@@ -1,0 +1,145 @@
+﻿@page
+@model WebApp.Pages.ReportingData.ApprovedOutagesModel
+@{
+    ViewData["Title"] = "Approved Outage Requests";
+}
+
+@if (Model != null && Model.OReqs != null)
+{
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-12">
+            <h2>@ViewData["Title"]</h2>
+            <hr />
+            <table class="table table-bordered table-hover display" id="display_table">
+                <thead>
+                    <tr>
+                        <th>ElementName</th>
+                        <th>ElementType</th>
+                        <th>Reason</th>
+                        <th>Requester</th>
+                        <th>OutageType</th>
+                        <th>OutageTag</th>
+                        <th>OccName</th>
+                        <th>OutageBasis</th>
+                        <th>ApprovedStartTime</th>
+                        <th>ApprovedEndTime</th>
+                        <th>RequesterRemarks</th>
+                        <th>AvailingStatus</th>
+                        <th>RpcRemarks</th>
+                        <th>ApprovalStatus</th>
+                        <th>RldcRemarks</th>
+                        <th>NldcApprovalStatus</th>
+                        <th>NldcRemarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in Model.OReqs)
+                    {
+                        <tr>
+                            <td>@req.ElementName</td>
+                            <td>@req.ElementType</td>
+                            <td>@req.Reason</td>
+                            <td>@req.Requester</td>
+                            <td>@req.OutageType</td>
+                            <td>@req.OutageTag</td>
+                            <td>@req.OccName</td>
+                            <td>@req.OutageBasis</td>
+                            <td>@(req.ApprovedStartTime?.ToString("yyyy-MM-dd HH:mm"))</td>
+                            <td>@(req.ApprovedEndTime?.ToString("yyyy-MM-dd HH:mm"))</td>
+                            <td>@req.RequesterRemarks</td>
+                            <td>@req.AvailingStatus</td>
+                            <td>@req.RpcRemarks</td>
+                            <td>@req.ApprovalStatus</td>
+                            <td>@req.RldcRemarks</td>
+                            <td>@req.NldcApprovalStatus</td>
+                            <td>@req.NldcRemarks</td>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ElementName</th>
+                        <th>ElementType</th>
+                        <th>Reason</th>
+                        <th>Requester</th>
+                        <th>OutageType</th>
+                        <th>OutageTag</th>
+                        <th>OccName</th>
+                        <th>OutageBasis</th>
+                        <th>ApprovedStartTime</th>
+                        <th>ApprovedEndTime</th>
+                        <th>RequesterRemarks</th>
+                        <th>AvailingStatus</th>
+                        <th>RpcRemarks</th>
+                        <th>ApprovalStatus</th>
+                        <th>RldcRemarks</th>
+                        <th>NldcApprovalStatus</th>
+                        <th>NldcRemarks</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+
+    @section Scripts{
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css" />
+<script src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/js/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/js/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script>
+    function strtrunc(str, max, add) {
+        add = add || '...';
+        return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
+    $(document).ready(function () {
+        // https://datatables.net/examples/api/multi_filter.html
+        // Setup - add a text input to each footer cell
+        $('#display_table tfoot th').each(function () {
+            //var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search" />');
+        });
+        var display_table = $('#display_table').DataTable({
+            fixedHeader: true,
+            "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            "order": [[0, "asc"]],
+            buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']
+        });
+        var r = $('#display_table tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', '3px');
+        });
+        $('#display_table thead').append(r);
+        // Apply the filter
+        // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+        $("#display_table thead input").on('keyup change', function () {
+            display_table
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+    });
+</script>
+<style>
+    thead input {
+        padding: 2px;
+        box-sizing: border-box;
+        font-size: small;
+        width: 100%
+    }
+</style>
+    }
+}

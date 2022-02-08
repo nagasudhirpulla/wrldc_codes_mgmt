@@ -5,8 +5,7 @@ namespace Infra.ReportingData;
 
 internal static class GetRequesterApprovedOutageRequestsForDateQuery
 {
-    //TODO complete this
-    public static List<ReportingOutageRequest> Execute(string _reportingConnStr, int requesterId, DateTime inpDate)
+    public static List<ReportingOutageRequest> Execute(string _reportingConnStr, DateTime inpDate)
     {
         List<ReportingOutageRequest> outageRequests = new();
 
@@ -29,6 +28,7 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
             sr.SHUTDOWN_TAG_ID,
             sr.occ_name,
             sr.requester_name,
+            sr.requester_id,
             CASE
                 WHEN SR.IS_CONTINUOUS = 1 THEN 'Continuous'
                 WHEN sr.IS_CONTINUOUS = 0 THEN 'Daily'
@@ -53,7 +53,7 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
             ss.ID = sd.STATUS_ID
         LEFT JOIN (
             SELECT
-                req.*, sot.NAME AS shutdownType, em.ENTITY_NAME AS elementType, or2.REASON, om.OCC_NAME, ud.USER_NAME AS requester_name, ss2.STATUS AS nldc_approval_status, sdTag.NAME AS SHUTDOWN_TAG
+                req.*, sot.NAME AS shutdownType, em.ENTITY_NAME AS elementType, or2.REASON, om.OCC_NAME, ud.USER_NAME AS requester_name, ud.USERID AS requester_id, ss2.STATUS AS nldc_approval_status, sdTag.NAME AS SHUTDOWN_TAG
             FROM
                 REPORTING_WEB_UI_UAT.SHUTDOWN_REQUEST req
             LEFT JOIN REPORTING_WEB_UI_UAT.SHUTDOWN_OUTAGE_TYPE sot ON
@@ -103,6 +103,8 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
 
         while (reader.Read())
         {
+            //TODO get values by column name instead of position
+            // https://stackoverflow.com/questions/28325813/sqldatareader-get-value-by-column-name-not-ordinal-number/42182943
             ReportingOutageRequest? req = new();
             req.ShutdownId = SafeGetInt(reader, 0);
             req.ShutdownRequestId = SafeGetInt(reader, 1);
@@ -118,16 +120,17 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
             req.OutageTagId = SafeGetInt(reader, 11);
             req.OccName = SafeGetString(reader, 12);
             req.Requester = SafeGetString(reader, 13);
-            req.OutageBasis = SafeGetString(reader, 14);
-            req.ApprovedStartTime = SafeGetDt(reader, 15);
-            req.ApprovedEndTime = SafeGetDt(reader, 16);
-            req.RequesterRemarks = SafeGetString(reader, 17);
-            req.AvailingStatus = SafeGetString(reader, 18);
-            req.ApprovalStatus = SafeGetString(reader, 19);
-            req.NldcApprovalStatus = SafeGetString(reader, 20);
-            req.RldcRemarks = SafeGetString(reader, 21);
-            req.RpcRemarks = SafeGetString(reader, 22);
-            req.NldcRemarks = SafeGetString(reader, 23);
+            req.RequesterId = SafeGetInt(reader, 14);
+            req.OutageBasis = SafeGetString(reader, 15);
+            req.ApprovedStartTime = SafeGetDt(reader, 16);
+            req.ApprovedEndTime = SafeGetDt(reader, 17);
+            req.RequesterRemarks = SafeGetString(reader, 18);
+            req.AvailingStatus = SafeGetString(reader, 19);
+            req.ApprovalStatus = SafeGetString(reader, 20);
+            req.NldcApprovalStatus = SafeGetString(reader, 21);
+            req.RldcRemarks = SafeGetString(reader, 22);
+            req.RpcRemarks = SafeGetString(reader, 23);
+            req.NldcRemarks = SafeGetString(reader, 24);
             outageRequests.Add(req);
         }
         reader.Dispose();

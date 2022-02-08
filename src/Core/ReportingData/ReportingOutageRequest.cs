@@ -16,6 +16,7 @@ public class ReportingOutageRequest
     public int OutageTagId { get; set; }
     public string? OccName { get; set; }
     public string? Requester { get; set; }
+    public int RequesterId { get; set; }
     public string? OutageBasis { get; set; }
     public DateTime? ApprovedStartTime { get; set; }
     public DateTime? ApprovedEndTime { get; set; }

@@ -4,5 +4,5 @@ public interface IReportingDataService
 {
     List<ReportingStakeholder> GetReportingStakeHolders();
     List<ReportingOwner> GetReportingOwners();
-    List<ReportingOutageRequest> GetRequesterApprovedOutageRequestsForDate(int requesterId, DateTime inpDate);
+    List<ReportingOutageRequest> GetApprovedOutageRequestsForDate(DateTime inpDate);
 }

@@ -64,12 +64,12 @@ public class ReportingDataService : IReportingDataService
         return owners;
     }
 
-    public List<ReportingOutageRequest> GetRequesterApprovedOutageRequestsForDate(int requesterId, DateTime inpDate)
+    public List<ReportingOutageRequest> GetApprovedOutageRequestsForDate(DateTime inpDate)
     {
         List<ReportingOutageRequest> outageRequests;
         try
         {
-            outageRequests = GetRequesterApprovedOutageRequestsForDateQuery.Execute(_reportingConnStr, requesterId, inpDate);
+            outageRequests = GetRequesterApprovedOutageRequestsForDateQuery.Execute(_reportingConnStr, inpDate);
         }
         catch (Exception ex)
         {
