@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Infra.ReportingData;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using WebApp;
@@ -6,6 +7,7 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Core.ReportingData;
+using System;
 
 namespace Infra.ReportingData.Tests;
 
@@ -33,5 +35,14 @@ public class ReportingDataServiceTests
     {
         List<ReportingOwner> owners = _reportingDataService.GetReportingOwners();
         Assert.IsTrue(owners.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetRequesterApprovedOutageRequestsForDateTest()
+    {
+        DateTime inpDate = DateTime.Now;
+        int requesterId = 131;
+        List<ReportingOutageRequest> outageRequests = _reportingDataService.GetRequesterApprovedOutageRequestsForDate(requesterId, inpDate);
+        Assert.IsTrue(outageRequests.Count > 0);
     }
 }

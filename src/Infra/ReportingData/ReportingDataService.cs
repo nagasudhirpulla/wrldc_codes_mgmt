@@ -63,4 +63,19 @@ public class ReportingDataService : IReportingDataService
         }
         return owners;
     }
+
+    public List<ReportingOutageRequest> GetRequesterApprovedOutageRequestsForDate(int requesterId, DateTime inpDate)
+    {
+        List<ReportingOutageRequest> outageRequests;
+        try
+        {
+            outageRequests = GetRequesterApprovedOutageRequestsForDateQuery.Execute(_reportingConnStr, requesterId, inpDate);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            outageRequests = new();
+        }
+        return outageRequests;
+    }
 }
