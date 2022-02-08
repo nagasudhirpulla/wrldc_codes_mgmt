@@ -152,7 +152,7 @@ public class EditModel : PageModel
                 stakeholderOptions.Add(new ReportingStakeholder(eS.StakeHolderId, eS.StakeHolderName ?? eS.StakeHolderId.ToString()));
             }
         }
-        StakeholderOptions = new MultiSelectList(stakeholderOptions, "Id", "Username", existingStakeholders.Select(x => x.StakeHolderId));
+        StakeholderOptions = new MultiSelectList(stakeholderOptions, nameof(ReportingStakeholder.Id), nameof(ReportingStakeholder.Username), existingStakeholders.Select(x => x.StakeHolderId));
 
         List<ReportingOwner> elementOwnerOptions = new(allElementOwners);
         // make sure existing element-owners are present in the select list
