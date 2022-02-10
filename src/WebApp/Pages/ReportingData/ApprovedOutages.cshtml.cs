@@ -1,6 +1,5 @@
 using Application.Common.Interfaces;
 using Application.ReportingData.Queries.GetApprovedOutagesForDate;
-using Application.Users;
 using Application.UserStakeHolders.Queries.GetUserStakeholders;
 using Core.Entities;
 using Core.ReportingData;

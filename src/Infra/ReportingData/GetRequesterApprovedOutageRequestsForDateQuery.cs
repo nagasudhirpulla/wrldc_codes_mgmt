@@ -79,58 +79,34 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
 
         OracleDataReader reader = cmd.ExecuteReader();
 
-        // TODO move to utils or create extension method
-        static string SafeGetString(OracleDataReader reader, int colIndex)
-        {
-            if (!reader.IsDBNull(colIndex))
-                return reader.GetString(colIndex);
-            return string.Empty;
-        }
-
-        static int SafeGetInt(OracleDataReader reader, int colIndex)
-        {
-            if (!reader.IsDBNull(colIndex))
-                return reader.GetInt32(colIndex);
-            return -1;
-        }
-
-        static DateTime? SafeGetDt(OracleDataReader reader, int colIndex)
-        {
-            if (!reader.IsDBNull(colIndex))
-                return reader.GetDateTime(colIndex);
-            return null;
-        }
-
         while (reader.Read())
         {
-            //TODO get values by column name instead of position
-            // https://stackoverflow.com/questions/28325813/sqldatareader-get-value-by-column-name-not-ordinal-number/42182943
             ReportingOutageRequest? req = new();
-            req.ShutdownId = SafeGetInt(reader, 0);
-            req.ShutdownRequestId = SafeGetInt(reader, 1);
-            req.ElementTypeId = SafeGetInt(reader, 2);
-            req.ElementId = SafeGetInt(reader, 3);
-            req.ElementName = SafeGetString(reader, 4);
-            req.ElementType = SafeGetString(reader, 5);
-            req.ReasonId = SafeGetInt(reader, 6);
-            req.Reason = SafeGetString(reader, 7);
-            req.OutageType = SafeGetString(reader, 8);
-            req.OutageTypeId = SafeGetInt(reader, 9);
-            req.OutageTag = SafeGetString(reader, 10);
-            req.OutageTagId = SafeGetInt(reader, 11);
-            req.OccName = SafeGetString(reader, 12);
-            req.Requester = SafeGetString(reader, 13);
-            req.RequesterId = SafeGetInt(reader, 14);
-            req.OutageBasis = SafeGetString(reader, 15);
-            req.ApprovedStartTime = SafeGetDt(reader, 16);
-            req.ApprovedEndTime = SafeGetDt(reader, 17);
-            req.RequesterRemarks = SafeGetString(reader, 18);
-            req.AvailingStatus = SafeGetString(reader, 19);
-            req.ApprovalStatus = SafeGetString(reader, 20);
-            req.NldcApprovalStatus = SafeGetString(reader, 21);
-            req.RldcRemarks = SafeGetString(reader, 22);
-            req.RpcRemarks = SafeGetString(reader, 23);
-            req.NldcRemarks = SafeGetString(reader, 24);
+            req.ShutdownId = DbUtils.SafeGetInt(reader, "ID");
+            req.ShutdownRequestId = DbUtils.SafeGetInt(reader, "SHUTDOWN_REQUEST_ID");
+            req.ElementTypeId = DbUtils.SafeGetInt(reader, "ENTITY_ID");
+            req.ElementId = DbUtils.SafeGetInt(reader, "ELEMENT_ID");
+            req.ElementName = DbUtils.SafeGetString(reader, "ELEMENT_NAME");
+            req.ElementType = DbUtils.SafeGetString(reader, "ELEMENTTYPE");
+            req.ReasonId = DbUtils.SafeGetInt(reader, "REASON_ID");
+            req.Reason = DbUtils.SafeGetString(reader, "REASON");
+            req.OutageType = DbUtils.SafeGetString(reader, "SHUTDOWNTYPE");
+            req.OutageTypeId = DbUtils.SafeGetInt(reader, "SHUT_DOWN_TYPE_ID");
+            req.OutageTag = DbUtils.SafeGetString(reader, "SHUTDOWN_TAG");
+            req.OutageTagId = DbUtils.SafeGetInt(reader, "SHUTDOWN_TAG_ID");
+            req.OccName = DbUtils.SafeGetString(reader, "OCC_NAME");
+            req.Requester = DbUtils.SafeGetString(reader, "REQUESTER_NAME");
+            req.RequesterId = DbUtils.SafeGetInt(reader, "REQUESTER_ID");
+            req.OutageBasis = DbUtils.SafeGetString(reader, "DAILYCONT");
+            req.ApprovedStartTime = DbUtils.SafeGetDt(reader, "APPROVED_START_DATE");
+            req.ApprovedEndTime = DbUtils.SafeGetDt(reader, "APPROVED_END_DATE");
+            req.RequesterRemarks = DbUtils.SafeGetString(reader, "REQUESTER_REMARKS");
+            req.AvailingStatus = DbUtils.SafeGetString(reader, "AVAILINGSTATUS");
+            req.ApprovalStatus = DbUtils.SafeGetString(reader, "STATUS");
+            req.NldcApprovalStatus = DbUtils.SafeGetString(reader, "NLDC_APPROVAL_STATUS");
+            req.RldcRemarks = DbUtils.SafeGetString(reader, "RLDC_REMARKS");
+            req.RpcRemarks = DbUtils.SafeGetString(reader, "RPC_REMARKS");
+            req.NldcRemarks = DbUtils.SafeGetString(reader, "NLDC_REMARKS");
             outageRequests.Add(req);
         }
         reader.Dispose();
