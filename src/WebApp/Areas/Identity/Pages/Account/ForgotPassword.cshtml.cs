@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using DNTCaptcha.Core;
+using Microsoft.Extensions.Options;
 using Core.Entities;
 
 namespace WebApp.Areas.Identity.Pages.Account;
@@ -16,11 +18,17 @@ public class ForgotPasswordModel : PageModel
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailSender _emailSender;
+    private readonly IDNTCaptchaValidatorService _validatorService;
+    private readonly DNTCaptchaOptions _captchaOptions;
 
-    public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+    public ForgotPasswordModel(UserManager<ApplicationUser> userManager, 
+        IEmailSender emailSender, IDNTCaptchaValidatorService validatorService,
+        IOptions<DNTCaptchaOptions> options)
     {
         _userManager = userManager;
         _emailSender = emailSender;
+        _validatorService = validatorService;
+        _captchaOptions = options == null ? throw new ArgumentNullException(nameof(options)) : options.Value;
     }
 
     [BindProperty]
@@ -35,6 +43,11 @@ public class ForgotPasswordModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (!_validatorService.HasRequestValidCaptchaEntry(Language.English, DisplayMode.ShowDigits))
+        {
+            this.ModelState.AddModelError(_captchaOptions.CaptchaComponent.CaptchaInputName, "Please enter the security code as a number.");
+        }
+
         if (ModelState.IsValid)
         {
             var user = await _userManager.FindByEmailAsync(Input.Email);
