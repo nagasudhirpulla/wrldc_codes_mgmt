@@ -13,4 +13,9 @@ public interface IAppDbContext
 
     DbSet<UserStakeholder> UserStakeholders { get; set; }
     DbSet<UserElementOwner> UserElementOwners { get; set; }
+    DbSet<CodeRequest> CodeRequests { get; set; }
+    DbSet<CodeRequestElementOwner> CodeRequestElementOwners { get; set; }
+    DbSet<CodeRequestStakeHolder> CodeRequestStakeHolders { get; set; }
+    DbSet<CodeRequestConsent> CodeRequestConsents { get; set; }
+    DbSet<CodeRequestRemark> CodeRequestRemarks { get; set; }
 }

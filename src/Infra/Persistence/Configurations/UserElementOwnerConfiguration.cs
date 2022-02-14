@@ -15,7 +15,7 @@ class UserElementOwnerConfiguration : IEntityTypeConfiguration<UserElementOwner>
         builder.Property(b => b.UsrId)
            .IsRequired();
 
-        // combination of user and stakeholder Id will be unique
+        // combination of user and element owner Id will be unique
         builder
                .HasIndex(b => new { b.OwnerId, b.UsrId })
                .IsUnique();

@@ -23,6 +23,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>, IAppDbContext
 
     public DbSet<UserStakeholder> UserStakeholders { get; set; }
     public DbSet<UserElementOwner> UserElementOwners { get; set; }
+    public DbSet<CodeRequest> CodeRequests { get; set; }
+    public DbSet<CodeRequestElementOwner> CodeRequestElementOwners { get; set; }
+    public DbSet<CodeRequestStakeHolder> CodeRequestStakeHolders { get; set; }
+    public DbSet<CodeRequestConsent> CodeRequestConsents { get; set; }
+    public DbSet<CodeRequestRemark> CodeRequestRemarks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
