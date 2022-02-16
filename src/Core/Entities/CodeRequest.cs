@@ -5,6 +5,8 @@ namespace Core.Entities;
 
 public class CodeRequest : AuditableEntity
 {
+    public CodeType? CodeType { get; set; }
+
     private CodeRequestStatus _requestState = CodeRequestStatus.Requested;
     public DateTime RequestStatusChangedAt { get; set; } = DateTime.Now;
 

@@ -2,13 +2,13 @@
 
 namespace Core.Enums;
 
-public sealed class ApprovalStatus : SmartEnum<ApprovalStatus>
+public sealed class ApprovalStatus : SmartEnum<ApprovalStatus, string>
 {
-    public static readonly ApprovalStatus Pending = new(nameof(Pending), 1);
-    public static readonly ApprovalStatus Approved = new(nameof(Approved), 2);
-    public static readonly ApprovalStatus DisApproved = new(nameof(DisApproved), 3);
+    public static readonly ApprovalStatus Pending = new(nameof(Pending), "PENDING");
+    public static readonly ApprovalStatus Approved = new(nameof(Approved), "APPROVED");
+    public static readonly ApprovalStatus DisApproved = new(nameof(DisApproved), "DIS_APPROVED");
 
-    private ApprovalStatus(string name, int value) : base(name, value)
+    private ApprovalStatus(string name, string value) : base(name, value)
     {
     }
 }

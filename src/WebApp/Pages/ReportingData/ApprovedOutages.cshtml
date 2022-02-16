@@ -6,11 +6,12 @@
 
 @if (Model != null && Model.OReqs != null)
 {
+    <br/>
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-12">
             <h2>@ViewData["Title"]</h2>
             <hr />
-            <table class="table table-bordered table-hover display" id="display_table">
+            <table class="display table table-striped table-bordered table-hover table-responsive w-auto" id="display_table">
                 <thead>
                     <tr>
                         <th>ElementName</th>
@@ -131,6 +132,7 @@
                 .search(this.value)
                 .draw();
         });
+        // on row click - https://github.com/nagasudhirpulla/wrldc_codebook/blob/875d06277f8f345d994800edf65494d68082cab1/static/app/loadApprovedOutages.js#L83
     });
 </script>
 <style>

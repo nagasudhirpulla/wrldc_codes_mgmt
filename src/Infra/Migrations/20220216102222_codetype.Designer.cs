@@ -3,6 +3,7 @@ using System;
 using Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220216102222_codetype")]
+    partial class codetype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,9 +157,8 @@ namespace Infra.Migrations
                     b.Property<int?>("OutageTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("RequestState")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("RequestState")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("RequestStatusChangedAt")
                         .HasColumnType("timestamp without time zone");

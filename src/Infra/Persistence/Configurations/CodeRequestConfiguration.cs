@@ -9,6 +9,9 @@ internal class CodeRequestConfiguration : IEntityTypeConfiguration<CodeRequest>
     public void Configure(EntityTypeBuilder<CodeRequest> builder)
     {
 
+        builder.Property(b => b.CodeType)
+           .IsRequired();
+
         builder.Property(b => b.RequestState)
            .IsRequired();
 
