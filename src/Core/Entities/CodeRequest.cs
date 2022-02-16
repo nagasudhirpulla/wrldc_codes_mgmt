@@ -5,7 +5,22 @@ namespace Core.Entities;
 
 public class CodeRequest : AuditableEntity
 {
-    public CodeRequestStatus RequestState { get; set; } = CodeRequestStatus.Requested;
+    private CodeRequestStatus _requestState = CodeRequestStatus.Requested;
+    public DateTime RequestStatusChangedAt { get; set; } = DateTime.Now;
+
+    public CodeRequestStatus RequestState
+    {
+        get => _requestState;
+        set
+        {
+            if (_requestState != value)
+            {
+                _requestState = value;
+                RequestStatusChangedAt = DateTime.Now;
+            }
+        }
+    }
+
 
     public ApplicationUser? Requester { get; set; }
     public string? RequesterId { get; set; }
@@ -25,8 +40,9 @@ public class CodeRequest : AuditableEntity
     public string? OutageTag { get; set; }
 
     public int? OutageAprovalId { get; set; }
-    
-    public DateTime? DesiredExecutionTime { get; set; }
+
+    public DateTime? DesiredExecutionStartTime { get; set; }
+    public DateTime? DesiredExecutionEndTime { get; set; }
 
     public IList<CodeRequestElementOwner> ElementOwners { get; private set; } = new List<CodeRequestElementOwner>();
 

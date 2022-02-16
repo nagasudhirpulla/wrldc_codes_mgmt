@@ -14,9 +14,9 @@ public class CodeRequestConsent : AuditableEntity
     public string? Remarks { get; set; }
     public string? RldcRemarks { get; set; }
 
-    private ApprovalStatus? _approvalStatus;
+    private ApprovalStatus _approvalStatus = ApprovalStatus.Pending;
 
-    public ApprovalStatus? ApprovalStatus
+    public ApprovalStatus ApprovalStatus
     {
         get => _approvalStatus;
         set
@@ -29,5 +29,5 @@ public class CodeRequestConsent : AuditableEntity
         }
     }
 
-    public DateTime? ApprovalStatusChangedAt { get; set; }
+    public DateTime ApprovalStatusChangedAt { get; set; } = DateTime.Now;
 }
