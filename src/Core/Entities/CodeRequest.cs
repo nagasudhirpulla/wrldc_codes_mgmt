@@ -23,7 +23,6 @@ public class CodeRequest : AuditableEntity
         }
     }
 
-
     public ApplicationUser? Requester { get; set; }
     public string? RequesterId { get; set; }
 
@@ -41,7 +40,7 @@ public class CodeRequest : AuditableEntity
     public int? OutageTagId { get; set; }
     public string? OutageTag { get; set; }
 
-    public int? OutageAprovalId { get; set; }
+    public int? OutageApprovalId { get; set; }
 
     public DateTime? DesiredExecutionStartTime { get; set; }
     public DateTime? DesiredExecutionEndTime { get; set; }

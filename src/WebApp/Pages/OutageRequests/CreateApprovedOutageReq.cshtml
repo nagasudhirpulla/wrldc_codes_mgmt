@@ -1,15 +1,30 @@
 ﻿@page
-@model WebApp.Pages.ReportingData.ApprovedOutagesModel
+@model WebApp.Pages.OutageRequests.CreateApprovedOutageReqModel
 @{
-    ViewData["Title"] = "Approved Outage Requests";
+    ViewData["Title"] = "Create Approved Outage Request";
 }
 
-@if (Model != null && Model.OReqs != null)
+@if (Model != null && Model.OReqs.Count > 0)
 {
-    <br/>
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-4 col-lg-4 col-xl-3">
+            <h2>@ViewData["Title"]</h2>
+            <form method="post">
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <input asp-for="NewReq.OutageApprovalId" type="hidden" />
+
+                <h4><span>Selected Element = </span><span id="selApprovalDisplaySpan">--Please Select--</span></h4>
+
+                <button type="submit" class="btn btn-success">Create Approved Outage Code Request</button>
+            </form>
+        </div>
+    </div>
+    <br />
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-12">
-            <h2>@ViewData["Title"]</h2>
+            <h3>Approved Outages</h3>
             <hr />
             <table class="display table table-striped table-bordered table-hover table-responsive w-auto" id="display_table">
                 <thead>

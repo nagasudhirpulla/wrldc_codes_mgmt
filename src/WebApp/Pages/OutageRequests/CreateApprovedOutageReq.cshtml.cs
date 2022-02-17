@@ -1,3 +1,4 @@
+using Application.CodeRequests.Commands.CreateApprovedOutageCodeRequest;
 using Application.Common.Interfaces;
 using Application.ReportingData.Queries.GetApprovedOutagesForDate;
 using Application.UserStakeHolders.Queries.GetUserStakeholders;
@@ -5,19 +6,23 @@ using Core.Entities;
 using Core.ReportingData;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebApp.Pages.ReportingData;
+namespace WebApp.Pages.OutageRequests;
 
 [Authorize]
-public class ApprovedOutagesModel : PageModel
+public class CreateApprovedOutageReqModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
     private readonly IMediator _mediator;
     private readonly ICurrentUserService _currentUserService;
-    public List<ReportingOutageRequest> OReqs { get; set; }
+    public List<ReportingOutageRequest> OReqs { get; set; } = new();
 
-    public ApprovedOutagesModel(ILogger<IndexModel> logger, IMediator mediator, ICurrentUserService currentUserService)
+    [BindProperty]
+    public CreateApprovedOutageCodeRequestCommand? NewReq { get; set; }
+
+    public CreateApprovedOutageReqModel(ILogger<IndexModel> logger, IMediator mediator, ICurrentUserService currentUserService)
     {
         _logger = logger;
         _mediator = mediator;
@@ -27,7 +32,7 @@ public class ApprovedOutagesModel : PageModel
     public async Task OnGetAsync()
     {
         // check if user is authorized
-        string curUsrId = _currentUserService.UserId;
+        string? curUsrId = _currentUserService.UserId;
 
         // get the user requester Ids
         List<UserStakeholder>? userStakeHolders = await _mediator.Send(new GetUserStakeholdersQuery() { UsrId = curUsrId });
