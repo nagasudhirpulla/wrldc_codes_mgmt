@@ -3,17 +3,43 @@ using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData;
 
-internal static class GetRequesterApprovedOutageRequestsForDateQuery
+internal static class GetApprovedOutageRequestsQuery
 {
-    public static List<ReportingOutageRequest> Execute(string _reportingConnStr, DateTime inpDate)
+    public static List<ReportingOutageRequest> Execute(string _reportingConnStr, DateTime? inpDate, int? apprOutageReqId = null, bool isApproved = true)
     {
         List<ReportingOutageRequest> outageRequests = new();
 
         using OracleConnection con = new(_reportingConnStr);
 
         using OracleCommand cmd = con.CreateCommand();
+
+        // derive the where clause
+        List<string> whereClauses = new();
+        if (inpDate.HasValue)
+        {
+            whereClauses.Add("(TRUNC(:inpDate) BETWEEN TRUNC(sd.APPROVED_START_DATE) AND TRUNC(sd.APPROVED_END_DATE))");
+            cmd.Parameters.Add(new OracleParameter("inpDate", inpDate ?? null));
+        }
+        if (apprOutageReqId.HasValue)
+        {
+            whereClauses.Add("SD.SHUTDOWN_REQUEST_ID=:reqId AND ss.STATUS = 'Approved'");
+            cmd.Parameters.Add(new OracleParameter("reqId", apprOutageReqId.Value));
+        }
+        if (isApproved)
+        {
+            whereClauses.Add("ss.STATUS = 'Approved'");
+        }
+
+        // deny the query if there are no where clauses
+        if (whereClauses.Count == 0)
+        {
+            return outageRequests;
+        }
+
+        string whereClause = string.Join(" AND ", whereClauses);
+
         con.Open();
-        cmd.CommandText = @"SELECT
+        cmd.CommandText = @$"SELECT
             SD.ID,
             SD.SHUTDOWN_REQUEST_ID,
             sr.ENTITY_ID,
@@ -72,10 +98,7 @@ internal static class GetRequesterApprovedOutageRequestsForDateQuery
                 req.NLDC_STATUS_ID = ss2.ID ) sr ON
             sr.ID = sd.SHUTDOWN_REQUEST_ID
         WHERE
-            (TRUNC(:inpDate) BETWEEN TRUNC(sd.APPROVED_START_DATE) AND TRUNC(sd.APPROVED_END_DATE))
-            AND ss.STATUS = 'Approved'";
-
-        cmd.Parameters.Add(new OracleParameter("inpDate", inpDate));
+            {whereClause}";
 
         OracleDataReader reader = cmd.ExecuteReader();
 

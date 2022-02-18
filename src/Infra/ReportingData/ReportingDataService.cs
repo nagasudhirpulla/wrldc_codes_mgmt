@@ -69,13 +69,33 @@ public class ReportingDataService : IReportingDataService
         List<ReportingOutageRequest> outageRequests;
         try
         {
-            outageRequests = GetRequesterApprovedOutageRequestsForDateQuery.Execute(_reportingConnStr, inpDate);
+            outageRequests = GetApprovedOutageRequestsQuery.Execute(_reportingConnStr, inpDate);
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting approved outage requests for date, {msg}", ex.Message);
             outageRequests = new();
         }
         return outageRequests;
+    }
+
+    public ReportingOutageRequest? GetApprovedOutageRequestById(int outReqId)
+    {
+        ReportingOutageRequest? outageRequest = null;
+        try
+        {
+            var outageRequests = GetApprovedOutageRequestsQuery.Execute(_reportingConnStr, null, outReqId);
+            if (outageRequests != null && outageRequests.Count == 1)
+            {
+                // set the result if a single outage request is found
+                outageRequest = outageRequests[0];
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage request by id, {msg}", ex.Message);
+            outageRequest = null;
+        }
+        return outageRequest;
     }
 }
