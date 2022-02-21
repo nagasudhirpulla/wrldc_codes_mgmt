@@ -1,9 +1,8 @@
-﻿using Infra.Email;
-using Microsoft.AspNetCore.Identity.UI.Services;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net;
 using System.Net.Mail;
 
-namespace Infra.Services.Email;
+namespace Infra.Email;
 
 public class EmailSender : IEmailSender
 {
@@ -42,7 +41,7 @@ public class EmailSender : IEmailSender
             smtpClient.Port = 587;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(_emailConfig.Username, _emailConfig.Password, _emailConfig.Domain);
-            smtpClient.Timeout = (60 * 5 * 1000);
+            smtpClient.Timeout = 60 * 5 * 1000;
             await smtpClient.SendMailAsync(message);
         }
 

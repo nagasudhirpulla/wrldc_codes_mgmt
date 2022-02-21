@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Core.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Infra.Services.Email;
 using Core.Sms;
 using Application.Users;
 using Application.Common.Interfaces;

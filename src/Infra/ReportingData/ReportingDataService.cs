@@ -1,4 +1,5 @@
 ﻿using Core.ReportingData;
+using Infra.ReportingData.SingleElementOwnerQueries;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
@@ -48,7 +49,6 @@ public class ReportingDataService : IReportingDataService
         }
         return stakeholders;
     }
-
     public List<ReportingOwner> GetReportingOwners()
     {
         List<ReportingOwner> owners;
@@ -63,7 +63,6 @@ public class ReportingDataService : IReportingDataService
         }
         return owners;
     }
-
     public List<ReportingOutageRequest> GetApprovedOutageRequestsForDate(DateTime inpDate)
     {
         List<ReportingOutageRequest> outageRequests;
@@ -78,7 +77,6 @@ public class ReportingDataService : IReportingDataService
         }
         return outageRequests;
     }
-
     public ReportingOutageRequest? GetApprovedOutageRequestById(int outReqId)
     {
         ReportingOutageRequest? outageRequest = null;
@@ -97,5 +95,235 @@ public class ReportingDataService : IReportingDataService
             outageRequest = null;
         }
         return outageRequest;
+    }
+    public List<ReportingOwner> GetElementOwners(string elType, int id)
+    {
+        /*
+        GENERATING STATION
+        AC TRANSMISSION LINE
+        AC_TRANSMISSION_LINE_CIRCUIT
+        AUTO RECLOSURE
+        BUS
+        BUS REACTOR
+        Bay
+        FSC
+        Filter Bank
+        HVDC LINE
+        HVDC POLE
+        HVDC_LINE_CIRCUIT
+        LINE_REACTOR
+        SVC
+        Sub Filter Bank
+        TCSC
+        TRANSFORMER     
+         */
+        List<ReportingOwner> elementOwners = new();
+        try
+        {
+            if (elType == "TRANSFORMER")
+            {
+                elementOwners = GetTransformerOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "Bay")
+            {
+                elementOwners = GetBayOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "BUS")
+            {
+                elementOwners = GetBusOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "BUS REACTOR")
+            {
+                elementOwners = GetBusReactorOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "FSC")
+            {
+                elementOwners = GetFSCOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "GENERATING_STATION")
+            {
+                elementOwners = GetGeneratingUnitOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "HVDC_LINE_CIRCUIT")
+            {
+                elementOwners = GetHVDCLineCktOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "HVDC POLE")
+            {
+                elementOwners = GetHVDCPoleOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "LINE_REACTOR")
+            {
+                elementOwners = GetLineReactorOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (elType == "AC_TRANSMISSION_LINE_CIRCUIT")
+            {
+                elementOwners = GetTransmissionLineCktOwnersQuery.Execute(_reportingConnStr, id);
+            }
+            else if (new List<string>() { "TCSC", "MSR", "MSC" }.Any(x => x == elType))
+            {
+                elementOwners = GetCompensatorOwnersQuery.Execute(_reportingConnStr, id);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementOwners = new();
+        }
+        return elementOwners;
+    }
+    public List<ReportingOwner> GetTransmissionLineCktOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetTransmissionLineCktOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetBayOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetBayOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetBusOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetBusOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetBusReactorOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetBusReactorOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetCompensatorOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetCompensatorOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetFSCOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetFSCOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetGeneratingUnitOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetGeneratingUnitOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetHVDCLineCktOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetHVDCLineCktOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetHVDCPoleOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetHVDCPoleOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetLineReactorOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetLineReactorOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
+    }
+    public List<ReportingOwner> GetTransformerOwners(int id)
+    {
+        List<ReportingOwner> elementowners;
+        try
+        {
+            elementowners = GetTransformerOwnersQuery.Execute(_reportingConnStr, id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementowners = new();
+        }
+        return elementowners;
     }
 }

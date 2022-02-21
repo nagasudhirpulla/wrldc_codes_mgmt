@@ -7,7 +7,7 @@ namespace Application.CodeRequests.Commands.CreateApprovedOutageCodeRequest;
 
 public class CreateApprovedOutageCodeRequestCommand : IRequest<List<string>>, IMapFrom<CodeRequest>
 {
-    public int OutageApprovalId { get; set; }
+    public int ApprovedOutageRequestId { get; set; }
 
     public void Mapping(Profile profile)
     {

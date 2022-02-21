@@ -6,6 +6,6 @@ public class CreateApprovedOutageCodeRequestCommandValidator : AbstractValidator
 {
     public CreateApprovedOutageCodeRequestCommandValidator()
     {
-        RuleFor(x => x.OutageApprovalId).NotEmpty();
+        RuleFor(x => x.ApprovedOutageRequestId).NotEmpty();
     }
 }
