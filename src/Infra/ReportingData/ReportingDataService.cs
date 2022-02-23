@@ -98,6 +98,7 @@ public class ReportingDataService : IReportingDataService
     }
     public List<ReportingOwner> GetElementOwners(string elType, int id)
     {
+        // TODO create tests
         /*
         GENERATING STATION
         AC TRANSMISSION LINE

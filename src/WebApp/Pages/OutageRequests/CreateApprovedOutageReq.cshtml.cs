@@ -4,10 +4,13 @@ using Application.ReportingData.Queries.GetApprovedOutagesForDate;
 using Application.UserStakeHolders.Queries.GetUserStakeholders;
 using Core.Entities;
 using Core.ReportingData;
+using FluentValidation.AspNetCore;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApp.Extensions;
 
 namespace WebApp.Pages.OutageRequests;
 
@@ -31,6 +34,38 @@ public class CreateApprovedOutageReqModel : PageModel
 
     public async Task OnGetAsync()
     {
+        await SetOutageRequests();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        ValidationResult validationCheck = new CreateApprovedOutageCodeRequestCommandValidator().Validate(NewReq!);
+        validationCheck.AddToModelState(ModelState, nameof(NewReq));
+
+
+        if (!ModelState.IsValid)
+        {
+            await SetOutageRequests();
+            return Page();
+        }
+
+        List<string> errs = await _mediator.Send(NewReq!);
+        if (errs.Count == 0)
+        {
+            _logger.LogInformation($"Created new approved outage code request");
+            return RedirectToPage().WithSuccess($"Created new approved outage code request");
+        }
+
+        foreach (var error in errs)
+        {
+            ModelState.AddModelError(string.Empty, error);
+        }
+        await SetOutageRequests();
+        return Page();
+    }
+
+    private async Task SetOutageRequests()
+    {
         // check if user is authorized
         string? curUsrId = _currentUserService.UserId;
 
@@ -44,6 +79,5 @@ public class CreateApprovedOutageReqModel : PageModel
 
         // filter the outage requests to have only the desired requester Ids
         OReqs = OReqs.Where(x => requesterIds.Contains(x.RequesterId)).ToList();
-
     }
 }

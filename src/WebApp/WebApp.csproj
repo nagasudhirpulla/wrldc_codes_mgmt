@@ -22,6 +22,7 @@
   <ItemGroup>
     <None Include="wwwroot\js\node_modules\chosen-js\chosen.jquery.min.js" />
     <None Include="wwwroot\js\node_modules\datatables.net-bs5\js\dataTables.bootstrap5.min.js" />
+    <None Include="wwwroot\js\node_modules\datatables.net-select\js\dataTables.select.min.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +45,10 @@
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Infra\Infra.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\datatables\" />
   </ItemGroup>
 
 </Project>

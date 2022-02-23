@@ -4,7 +4,6 @@ using Core.Entities;
 using Core.Enums;
 using Core.ReportingData;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -17,21 +16,19 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
     private readonly ICurrentUserService _currentUserService;
     private readonly IAppDbContext _context;
     private readonly IReportingDataService _reportingDataService;
-    private readonly UserManager<ApplicationUser> _userManager;
 
-    public CreateApprovedOutageCodeRequestCommandHandler(ILogger<CreateApprovedOutageCodeRequestCommandHandler> logger, IMapper mapper, ICurrentUserService currentUserService, IAppDbContext context, IReportingDataService reportingDataService, UserManager<ApplicationUser> userManager)
+    public CreateApprovedOutageCodeRequestCommandHandler(ILogger<CreateApprovedOutageCodeRequestCommandHandler> logger, IMapper mapper, ICurrentUserService currentUserService, IAppDbContext context, IReportingDataService reportingDataService)
     {
         _logger = logger;
         _mapper = mapper;
         _context = context;
         _currentUserService = currentUserService;
         _reportingDataService = reportingDataService;
-        _userManager = userManager;
     }
 
     public async Task<List<string>> Handle(CreateApprovedOutageCodeRequestCommand request, CancellationToken cancellationToken)
     {
-        List<string> result = new();
+        List<string> errs = new();
 
         // create new code request entity from command
         CodeRequest newCodeReq = _mapper.Map<CodeRequest>(request);
@@ -40,7 +37,8 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         if (outageReq == null)
         {
             // custom exception can be created instead
-            result.Add("Approved Outage Request Id not valid");
+            errs.Add("Approved Outage Request Id not valid");
+            return errs;
         }
         ReportingOutageRequest req = outageReq!;
 
@@ -50,7 +48,8 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         if (isOutageRequestStale)
         {
             // custom exception can be created instead
-            result.Add("Outage request date range already elapsed");
+            errs.Add("Outage request date range already elapsed");
+            return errs;
         }
 
         // set code type as approved outage code
@@ -61,14 +60,17 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         // set logged in user as the requester
         newCodeReq.RequesterId = _currentUserService.UserId;
 
+        string? elType = req.ElementType;
+        int elId = req.ElementId;
+
         // populate all the code request properties from the approved outage request
         newCodeReq.Description = req.Reason;
 
-        newCodeReq.ElementId = req.ElementId;
+        newCodeReq.ElementId = elId;
         newCodeReq.ElementName = req.ElementName;
 
         newCodeReq.ElementTypeId = req.ElementTypeId;
-        newCodeReq.ElementType = req.ElementType;
+        newCodeReq.ElementType = elType;
 
         newCodeReq.OutageTypeId = req.OutageTypeId;
         newCodeReq.OutageType = req.OutageType;
@@ -76,30 +78,45 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         newCodeReq.OutageTag = req.OutageTag;
         newCodeReq.OutageTagId = req.OutageTagId;
 
-        newCodeReq.OutageApprovalId = req.ShutdownRequestId;
+        newCodeReq.OutageRequestId = req.ShutdownRequestId;
 
         newCodeReq.DesiredExecutionStartTime = req.ApprovedStartTime;
         newCodeReq.DesiredExecutionEndTime = req.ApprovedEndTime;
 
-        // insert row into the code requests table
-        _context.CodeRequests.Add(newCodeReq);
+        using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            // insert code request into the code requests table
+            _context.CodeRequests.Add(newCodeReq);
+            _ = await _context.SaveChangesAsync(cancellationToken);
 
-        // TODO derive element owners and attach to code request
-        List<CodeRequestElementOwner> elementOwners = new();
+            // derive element owners and attach to code request
+            List<ReportingOwner> owners = _reportingDataService.GetElementOwners(elType!, elId);
+            List<CodeRequestElementOwner> elementOwners = owners.Select(o => new CodeRequestElementOwner { CodeRequestId = newCodeReq.Id, OwnerId = o.Id, OwnerName = o.Name })
+                                                            .ToList();
+            _context.CodeRequestElementOwners.AddRange(elementOwners);
 
-        // Derive concerened stake holder login users based on owners
-        List<CodeRequestStakeHolder> concernedUsers = await _context.UserElementOwners
-                    .Where(uo => elementOwners.Any(eo => uo.OwnerId == eo.OwnerId))
-                    .Select(uo => new CodeRequestStakeHolder { CodeRequestId = newCodeReq.Id, StakeholderId = uo.UsrId })
-                    .ToListAsync(cancellationToken: cancellationToken);
+            // derive concerened stake holder login users based on owners
+            List<CodeRequestStakeHolder> concernedUsers = await _context.UserElementOwners
+                        .Where(uo => elementOwners.Select(eo => eo.OwnerId).Contains(uo.OwnerId))
+                        .Select(uo => new CodeRequestStakeHolder { CodeRequestId = newCodeReq.Id, StakeholderId = uo.UsrId })
+                        .ToListAsync(cancellationToken: cancellationToken);
 
-        // link the concerened stakeholders with the code
-        _context.CodeRequestStakeHolders.AddRange(concernedUsers);
+            // link the concerened stakeholders with the code
+            _context.CodeRequestStakeHolders.AddRange(concernedUsers);
 
-        // persist changes to database
-        _ = await _context.SaveChangesAsync(cancellationToken);
+            // persist changes to database
+            _ = await _context.SaveChangesAsync(cancellationToken);
+            await transaction.CommitAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            _logger.LogError("rolling back DB transaction while creting approved outage code request creation, {message}", ex.Message);
+            throw;
+        }
 
         // TODO create code request creation event and event handler to send notifications to the RLDC users
-        return result;
+        return errs;
     }
 }

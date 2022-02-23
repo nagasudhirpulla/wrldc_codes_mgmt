@@ -22,7 +22,7 @@ internal static class GetApprovedOutageRequestsQuery
         }
         if (apprOutageReqId.HasValue)
         {
-            whereClauses.Add("SD.SHUTDOWN_REQUEST_ID=:reqId AND ss.STATUS = 'Approved'");
+            whereClauses.Add("SD.SHUTDOWN_REQUEST_ID=:reqId");
             cmd.Parameters.Add(new OracleParameter("reqId", apprOutageReqId.Value));
         }
         if (isApproved)

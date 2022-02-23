@@ -7,7 +7,7 @@
 @if (Model != null && Model.OReqs.Count > 0)
 {
     <div class="row justify-content-center align-items-center">
-        <div class="col col-md-4 col-lg-4 col-xl-3">
+        <div class="col col-md-8 col-lg-8 col-xl-6">
             <h2>@ViewData["Title"]</h2>
             <form method="post">
                 <hr />
@@ -15,7 +15,7 @@
 
                 <input asp-for="NewReq.ApprovedOutageRequestId" type="hidden" />
 
-                <h4><span>Selected Element = </span><span id="selApprovalDisplaySpan">--Please Select--</span></h4>
+                <h4><span>Selected Element = </span><span id="selApprovalDisplaySpan">--Please select from below table--</span></h4>
 
                 <button type="submit" class="btn btn-success">Create Approved Outage Code Request</button>
             </form>
@@ -46,6 +46,7 @@
                         <th>RldcRemarks</th>
                         <th>NldcApprovalStatus</th>
                         <th>NldcRemarks</th>
+                        <th>ShutdownRequestId</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +70,7 @@
                             <td>@req.RldcRemarks</td>
                             <td>@req.NldcApprovalStatus</td>
                             <td>@req.NldcRemarks</td>
+                            <td>@req.ShutdownRequestId</td>
                         </tr>
                     }
 
@@ -92,6 +94,7 @@
                         <th>RldcRemarks</th>
                         <th>NldcApprovalStatus</th>
                         <th>NldcRemarks</th>
+                        <th>ShutdownRequestId</th>
                     </tr>
                 </tfoot>
             </table>
@@ -102,8 +105,9 @@
 
     @section Scripts{
 <link rel="stylesheet" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
-<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
 <link rel="stylesheet" href="~/js/node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datatables/select.bootstrap5.min.css" />
 <script src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
@@ -114,6 +118,7 @@
 <script src="~/js/node_modules/pdfmake/build/pdfmake.min.js"></script>
 <script src="~/js/node_modules/pdfmake/build/vfs_fonts.js"></script>
 <script src="~/js/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/js/node_modules/datatables.net-select/js/dataTables.select.min.js"></script>
 <script>
     function strtrunc(str, max, add) {
         add = add || '...';
@@ -129,6 +134,7 @@
         var display_table = $('#display_table').DataTable({
             fixedHeader: true,
             "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "select":true,
             "pageLength": 50,
             dom: 'Bfrtip',
             "order": [[0, "asc"]],
@@ -147,8 +153,30 @@
                 .search(this.value)
                 .draw();
         });
-        // on row click - https://github.com/nagasudhirpulla/wrldc_codebook/blob/875d06277f8f345d994800edf65494d68082cab1/static/app/loadApprovedOutages.js#L83
+        // hide the last column that contains element ID
+        display_table.column(-1).visible(false);
+
+        // setup row selection listener
+        $('#display_table').on('select.dt', function(e, dt, type, indexes) {
+            // get the array of selected rows
+            const selectedRows = dt.rows(indexes).data();
+            // console.log(selectedRows);
+            if(selectedRows.length == 0){
+                console.log("table rows not selected but trigger fired...");
+            }
+            // get the selected row data
+            const rowData = selectedRows[0];
+
+            // display select element name
+            const elName = rowData[0];
+            document.getElementById("selApprovalDisplaySpan").innerHTML = elName;
+
+            // populate selected shutdown request Id in form
+            const sdRequestId = rowData[rowData.length-1];
+            document.getElementsByName("NewReq.ApprovedOutageRequestId")[0].value = sdRequestId;
+        });
     });
+
 </script>
 <style>
     thead input {
@@ -159,4 +187,10 @@
     }
 </style>
     }
+}
+else
+{
+    <div class="container">
+        <h4>Ouatge Requests not present</h4>
+    </div>
 }
