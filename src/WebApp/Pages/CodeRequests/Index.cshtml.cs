@@ -1,17 +1,15 @@
+using Application.CodeRequests.Queries.GetCodeRequestsBetweenDates;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Application.Users;
-using Application.Users.Queries.GetAppUsers;
 
-namespace WebApp.Pages.Users;
+namespace WebApp.Pages.CodeRequests;
 
-[Authorize(Roles = SecurityConstants.AdminRoleString)]
 public class IndexModel : PageModel
 {
+    // TODO complete this
     private readonly ILogger<IndexModel> _logger;
     private readonly IMediator _mediator;
-    public IList<UserDTO> Users { get; set; } = new List<UserDTO>();
+    public IList<CodeRequestDTO> ReqList { get; set; } = new List<CodeRequestDTO>();
 
     public IndexModel(ILogger<IndexModel> logger, IMediator mediator)
     {
@@ -21,6 +19,6 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        Users = (await _mediator.Send(new GetAppUsersQuery())).Users;
+        ReqList = (await _mediator.Send(new GetCodeRequestsBetweenDatesQuery()));
     }
 }
