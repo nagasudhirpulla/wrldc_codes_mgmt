@@ -27,7 +27,12 @@ public class GetCodeRequestsBetweenDatesQuery : IRequest<List<CodeRequestDTO>>
             List<CodeRequest> reqList = await _context.CodeRequests
                 .Where(s => (s.Created >= request.StartDate && s.Created <= endDt) ||
                         (s.DesiredExecutionStartTime >= request.StartDate && s.DesiredExecutionStartTime <= endDt))
+                .Include(s => s.Requester)
+                .Include(s => s.ElementOwners)
+                .Include(s => s.ConcernedStakeholders)
+                .ThenInclude(s => s.Stakeholder)
                 .ToListAsync(cancellationToken: cancellationToken);
+
             List<CodeRequestDTO> res = reqList.Select(r => _mapper.Map<CodeRequestDTO>(r)).ToList();
             return res;
         }

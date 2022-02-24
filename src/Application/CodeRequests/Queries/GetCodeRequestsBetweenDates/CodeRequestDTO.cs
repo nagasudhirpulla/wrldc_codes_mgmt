@@ -34,13 +34,15 @@ public class CodeRequestDTO : IMapFrom<CodeRequest>
     public DateTime? DesiredExecutionEndTime { get; set; }
 
     public List<ReportingOwner> ElementOwners { get; set; } = new();
-    public List<CodeRequestStakeHolder> ConcernedStakeholders { get; set; } = new();
+    public List<(string Id, string DisplayName)> ConcernedStakeholders { get; set; } = new();
     public List<CodeRequestConsent> ConsentRequests { get; set; } = new();
     public List<CodeRequestRemark> RemarksRequests { get; set; } = new();
 
     public void Mapping(Profile profile)
     {
         profile.CreateMap<CodeRequest, CodeRequestDTO>()
-            .ForMember(d => d.Requester, opt => opt.MapFrom(s => s.Requester!.DisplayName));
+            .ForMember(d => d.Requester, opt => opt.MapFrom(s => s.Requester!.DisplayName))
+            .ForMember(d => d.ElementOwners, opt => opt.MapFrom(s => s.ElementOwners.Select(x => new ReportingOwner(x.OwnerId, x.OwnerName!)).ToList()))
+            .ForMember(d => d.ConcernedStakeholders, opt => opt.MapFrom(s => s.ConcernedStakeholders.Select(x => new Tuple<string, string>(x.Stakeholder!.Id, x.Stakeholder!.DisplayName ?? x.Stakeholder!.UserName)).ToList()));
     }
 }
