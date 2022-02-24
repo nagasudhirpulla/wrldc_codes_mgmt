@@ -85,6 +85,18 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         // populate all the code request properties from the approved outage request
         newCodeReq.Description = req.Reason;
 
+        List<string> remarks = new();
+        if (string.IsNullOrWhiteSpace(req.RldcRemarks))
+        {
+            remarks.Add(req.RldcRemarks);
+        }
+        if (string.IsNullOrWhiteSpace(req.NldcRemarks))
+        {
+            remarks.Add("NLDC remarks - " + req.NldcRemarks);
+        }
+
+        newCodeReq.Remarks = (remarks.Count == 0) ? null : string.Join(". ", remarks);
+
         newCodeReq.ElementId = elId;
         newCodeReq.ElementName = req.ElementName;
 

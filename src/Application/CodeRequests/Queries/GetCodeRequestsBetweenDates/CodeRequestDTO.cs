@@ -15,6 +15,7 @@ public class CodeRequestDTO : IMapFrom<CodeRequest>
     public string? RequesterId { get; set; }
 
     public string? Description { get; set; }
+    public string? Remarks { get; set; }
 
     public int? ElementId { get; set; }
     public string? ElementName { get; set; }

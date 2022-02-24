@@ -36,8 +36,9 @@ public class IndexModel : PageModel
 
         string? usrId = _currentUserService.UserId;
         ApplicationUser curUsr = await _userManager.FindByIdAsync(usrId);
-        var isUsrAdmin = (await _userManager.GetRolesAsync(curUsr)).Contains(SecurityConstants.AdminRoleString);
-        if (isUsrAdmin)
+        var isUsrAdminOrRldc = (await _userManager.GetRolesAsync(curUsr))
+                                .Any(x => new List<string>() { SecurityConstants.AdminRoleString, SecurityConstants.RldcRoleString }.Contains(x));
+        if (isUsrAdminOrRldc)
         {
             // get all code requests if the user is admin
             ReqList = codeReqs;

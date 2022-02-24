@@ -25,6 +25,7 @@
                         <th>Outage Type</th>
                         <th>Outage Tag</th>
                         <th>Description</th>
+                        <th>Remarks</th>
                         <th>Desired Start</th>
                         <th>Desired End</th>
                         <th>Element Owners</th>
@@ -43,6 +44,7 @@
                             <td>@req.OutageType</td>
                             <td>@req.OutageTag</td>
                             <td>@req.Description</td>
+                            <td>@req.Remarks</td>
                             <td>@req.DesiredExecutionStartTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@req.DesiredExecutionEndTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@(string.Join(",",req.ElementOwners.Select(x=>x.Name)))</td>
@@ -61,6 +63,7 @@
                         <th>Outage Type</th>
                         <th>Outage Tag</th>
                         <th>Description</th>
+                        <th>Remarks</th>
                         <th>Desired Start</th>
                         <th>Desired End</th>
                         <th>Element Owners</th>

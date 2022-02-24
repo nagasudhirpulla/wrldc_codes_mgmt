@@ -27,6 +27,7 @@ public class CodeRequest : AuditableEntity
     public string? RequesterId { get; set; }
 
     public string? Description { get; set; }
+    public string? Remarks { get; set; }
 
     public int? ElementId { get; set; }
     public string? ElementName { get; set; }
