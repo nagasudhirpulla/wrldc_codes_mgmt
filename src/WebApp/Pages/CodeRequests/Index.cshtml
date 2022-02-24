@@ -43,8 +43,8 @@
                             <td>@req.OutageType</td>
                             <td>@req.OutageTag</td>
                             <td>@req.Description</td>
-                            <td>@req.DesiredExecutionStartTime??.ToString("yyyy-MM-dd HH:mm")</td>
-                            <td>@req.DesiredExecutionEndTime??.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@req.DesiredExecutionStartTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@req.DesiredExecutionEndTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@(string.Join(",",req.ElementOwners.Select(x=>x.Name)))</td>
                             <td>@(string.Join(",",req.ConcernedStakeholders.Select(x=>x.DisplayName)))</td>
                         </tr>

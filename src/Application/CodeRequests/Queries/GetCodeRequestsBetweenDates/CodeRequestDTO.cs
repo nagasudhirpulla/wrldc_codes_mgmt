@@ -43,6 +43,8 @@ public class CodeRequestDTO : IMapFrom<CodeRequest>
         profile.CreateMap<CodeRequest, CodeRequestDTO>()
             .ForMember(d => d.Requester, opt => opt.MapFrom(s => s.Requester!.DisplayName))
             .ForMember(d => d.ElementOwners, opt => opt.MapFrom(s => s.ElementOwners.Select(x => new ReportingOwner(x.OwnerId, x.OwnerName!)).ToList()))
-            .ForMember(d => d.ConcernedStakeholders, opt => opt.MapFrom(s => s.ConcernedStakeholders.Select(x => new Tuple<string, string>(x.Stakeholder!.Id, x.Stakeholder!.DisplayName ?? x.Stakeholder!.UserName)).ToList()));
+            .ForMember(d => d.ConcernedStakeholders, opt => opt.MapFrom(s => s.ConcernedStakeholders
+                                                                                .Select(x => new ValueTuple<string, string>(x.Stakeholder!.Id, x.Stakeholder!.DisplayName ?? x.Stakeholder!.UserName))
+                                                                                .ToList()));
     }
 }

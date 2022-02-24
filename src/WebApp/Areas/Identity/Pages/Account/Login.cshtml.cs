@@ -102,7 +102,7 @@ public class LoginModel : PageModel
         else
         {
             //validate Username format
-            string usernameRegex = @"^[a-zA-Z0-9]*$";
+            string usernameRegex = @"^[a-zA-Z0-9_]*$";
             Regex re = new(usernameRegex);
             if (!re.IsMatch(Input.Username))
             {

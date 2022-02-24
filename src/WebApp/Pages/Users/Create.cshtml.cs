@@ -67,6 +67,6 @@ public class CreateModel : PageModel
 
     public void InitSelectListItems()
     {
-        URoles = new SelectList(SecurityConstants.GetRoles(), SecurityConstants.RldcRoleString);
+        URoles = new SelectList(SecurityConstants.GetRoles(), SecurityConstants.StakeholderRoleString);
     }
 }
