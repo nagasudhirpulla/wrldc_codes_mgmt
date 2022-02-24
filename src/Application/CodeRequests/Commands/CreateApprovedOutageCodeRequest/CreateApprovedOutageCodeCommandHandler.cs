@@ -42,6 +42,25 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         }
         ReportingOutageRequest req = outageReq!;
 
+        // check if any valid approved outage code request is already created
+        bool isCodeReqAlreadyCreated = await _context.CodeRequests.AnyAsync(c => (c.OutageRequestId == req.ShutdownRequestId) && (c.RequestState != CodeRequestStatus.DisApproved), cancellationToken: cancellationToken);
+        if (isCodeReqAlreadyCreated)
+        {
+            // custom exception can be created instead
+            errs.Add("Code request for this approved outage already created");
+            return errs;
+        }
+
+        // check if the requester of thr outage request if mapped with the logged in user
+        string? curUsrId = _currentUserService.UserId;
+        bool isOutageRequesterValid = await _context.UserStakeholders.AnyAsync(us => (us.StakeHolderId == req.RequesterId) && (us.UsrId == curUsrId), cancellationToken: cancellationToken);
+        if (!isOutageRequesterValid)
+        {
+            // custom exception can be created instead
+            errs.Add("Approved Outage requester id is not mapped to the current logged in user");
+            return errs;
+        }
+
         // check if approved outage request date range is already over
         DateTime nowTime = DateTime.Now;
         bool isOutageRequestStale = req.ApprovedEndTime < nowTime;
@@ -58,7 +77,7 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         newCodeReq.RequestState = CodeRequestStatus.Requested;
 
         // set logged in user as the requester
-        newCodeReq.RequesterId = _currentUserService.UserId;
+        newCodeReq.RequesterId = curUsrId;
 
         string? elType = req.ElementType;
         int elId = req.ElementId;
