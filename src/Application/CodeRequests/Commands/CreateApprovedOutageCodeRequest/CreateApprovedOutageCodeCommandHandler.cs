@@ -51,7 +51,7 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
             return errs;
         }
 
-        // check if the requester of thr outage request if mapped with the logged in user
+        // check if the requester of the outage request if mapped with the logged in user
         string? curUsrId = _currentUserService.UserId;
         bool isOutageRequesterValid = await _context.UserStakeholders.AnyAsync(us => (us.StakeHolderId == req.RequesterId) && (us.UsrId == curUsrId), cancellationToken: cancellationToken);
         if (!isOutageRequesterValid)
@@ -126,6 +126,9 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
 
             // persist changes to database
             _ = await _context.SaveChangesAsync(cancellationToken);
+
+            // TODO create code request creation event and event handler to send notifications to the RLDC users
+
             await transaction.CommitAsync(cancellationToken);
         }
         catch (Exception ex)
@@ -135,7 +138,6 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
             throw;
         }
 
-        // TODO create code request creation event and event handler to send notifications to the RLDC users
         return errs;
     }
 }
