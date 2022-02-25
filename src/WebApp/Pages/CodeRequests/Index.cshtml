@@ -4,16 +4,25 @@
     ViewData["Title"] = "Manage Code Requests";
 }
 
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-8 col-lg-8 col-xl-6">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <label asp-for="Query.StartDate"></label>
+            <input asp-for="Query.StartDate" type="date" />
+            <label asp-for="Query.EndDate" class="ms-3"></label>
+            <input asp-for="Query.EndDate" type="date" />
+            <button type="submit" class="btn btn-primary ms-3">Load Code Requests</button>
+        </form>
+    </div>
+</div>
+
 @if (Model != null && Model.ReqList != null && Model.ReqList.Count > 0)
 {
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-12">
-            <h2>@ViewData["Title"]</h2>
-            <hr />
-            <p>
-                <a asp-page="./Create" class="btn btn-sm btn-success">Create User</a>
-            </p>
-            <br />
+            <hr/>
             <table class="table table-bordered table-hover display" id="display_table">
                 <thead>
                     <tr>

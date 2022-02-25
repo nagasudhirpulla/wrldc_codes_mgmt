@@ -2,8 +2,10 @@ using Application.CodeRequests.Queries.GetCodeRequestsBetweenDates;
 using Application.Common.Interfaces;
 using Application.Users;
 using Core.Entities;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebApp.Pages.CodeRequests;
@@ -25,14 +27,31 @@ public class IndexModel : PageModel
         _userManager = userManager;
     }
 
+    [BindProperty]
+    public GetCodeRequestsBetweenDatesQuery Query { get; set; } = new() { StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date };
     public async Task OnGetAsync()
     {
         await PopulateReqListAsync();
     }
 
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var validator = new GetCodeRequestsBetweenDatesQueryValidator();
+        var validationResult = validator.Validate(Query);
+
+        if (!validationResult.IsValid)
+        {
+            validationResult.AddToModelState(ModelState, null);
+            return Page();
+        }
+
+        await PopulateReqListAsync();
+        return Page();
+    }
+
     private async Task PopulateReqListAsync()
     {
-        List<CodeRequestDTO> codeReqs = await _mediator.Send(new GetCodeRequestsBetweenDatesQuery());
+        List<CodeRequestDTO> codeReqs = await _mediator.Send(Query);
 
         string? usrId = _currentUserService.UserId;
         ApplicationUser curUsr = await _userManager.FindByIdAsync(usrId);

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using AutoMapper;
 using Core.Entities;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class GetCodeRequestsBetweenDatesQuery : IRequest<List<CodeRequestDTO>>
 {
     public DateTime StartDate { get; set; } = DateTime.Now;
     public DateTime EndDate { get; set; } = DateTime.Now;
+
     public class GetCodeRequestsBetweenDatesQueryHandler : IRequestHandler<GetCodeRequestsBetweenDatesQuery, List<CodeRequestDTO>>
     {
         private readonly IAppDbContext _context;
@@ -23,8 +25,8 @@ public class GetCodeRequestsBetweenDatesQuery : IRequest<List<CodeRequestDTO>>
 
         public async Task<List<CodeRequestDTO>> Handle(GetCodeRequestsBetweenDatesQuery request, CancellationToken cancellationToken)
         {
-            DateTime startDt = new (request.StartDate.Year, request.StartDate.Month, request.StartDate.Day);
-            DateTime endDt = new (request.EndDate.Year, request.EndDate.Month, request.EndDate.Day, 23, 59, 59);
+            DateTime startDt = new(request.StartDate.Year, request.StartDate.Month, request.StartDate.Day);
+            DateTime endDt = new(request.EndDate.Year, request.EndDate.Month, request.EndDate.Day, 23, 59, 59);
             List<CodeRequest> reqList = await _context.CodeRequests
                 .Where(s => (s.Created >= startDt && s.Created <= endDt) ||
                         (s.DesiredExecutionStartTime >= startDt && s.DesiredExecutionStartTime <= endDt))

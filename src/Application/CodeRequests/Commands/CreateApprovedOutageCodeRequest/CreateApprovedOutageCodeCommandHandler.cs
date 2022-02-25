@@ -88,7 +88,7 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         List<string> remarks = new();
         if (string.IsNullOrWhiteSpace(req.RldcRemarks))
         {
-            remarks.Add(req.RldcRemarks);
+            remarks.Add(req.RldcRemarks!);
         }
         if (string.IsNullOrWhiteSpace(req.NldcRemarks))
         {
