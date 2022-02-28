@@ -42,6 +42,8 @@ public class CodeRequest : AuditableEntity
     public string? OutageTag { get; set; }
 
     public int? OutageRequestId { get; set; }
+    
+    public int? OutageId { get; set; }
 
     public DateTime? DesiredExecutionStartTime { get; set; }
     public DateTime? DesiredExecutionEndTime { get; set; }

@@ -18,4 +18,5 @@ public interface IReportingDataService
     List<ReportingOwner> GetHVDCPoleOwners(int id);
     List<ReportingOwner> GetLineReactorOwners(int id);
     List<ReportingOwner> GetTransformerOwners(int id);
+    List<ReportingUnrevivedOutage> GetLatestUnrevivedOutages();
 }

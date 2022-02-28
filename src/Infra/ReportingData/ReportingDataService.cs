@@ -327,4 +327,21 @@ public class ReportingDataService : IReportingDataService
         }
         return elementowners;
     }
+
+    public List<ReportingUnrevivedOutage> GetLatestUnrevivedOutages()
+    {
+        List<ReportingUnrevivedOutage> unrevivedOutages;
+        try
+        {
+            unrevivedOutages = GetLatestUnrevivedOutagesQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            unrevivedOutages = new();
+        }
+        return unrevivedOutages;
+    }
+
+    
 }

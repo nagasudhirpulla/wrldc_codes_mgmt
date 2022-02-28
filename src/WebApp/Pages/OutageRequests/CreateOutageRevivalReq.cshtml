@@ -1,0 +1,165 @@
+﻿@page
+@model CreateOutageRevivalReqModel
+@{
+    ViewData["Title"] = "Create Unrevive Outage Code Request";
+}
+@if (Model != null && Model.UnrevOtgs.Count > 0)
+{
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-8 col-lg-8 col-xl-6">
+            <h2>@ViewData["Title"]</h2>
+            <form method="post">
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <input asp-for="Outage.OutageId" type="hidden" />
+
+                <h4><span>Selected Element = </span><span id="selApprovalDisplaySpan">--Please select from below table--</span></h4>
+
+                <button type="submit" class="btn btn-success">Create Approved Outage Code Request</button>
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-12">
+            <h3>Approved Outages</h3>
+            <hr />
+            <table class="display table table-striped table-bordered table-hover table-responsive w-auto" id="display_table">
+                <thead>
+                    <tr>
+                        <th>ElementName</th>
+                        <th>ElementType</th>
+                        <th>OutageType</th>
+                        <th>Reason</th>
+                        <th>OutageDateTime</th>
+                        <th>OutageRemarks</th>
+                        <th>OutageTag</th>
+                        <th>RTOutageId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in Model.UnrevOtgs)
+                    {
+                        <tr>
+                            <td>@req.ElementName</td>
+                            <td>@req.ElementType</td>
+                            <td>@req.OutageType</td>
+                            <td>@req.Reason</td>
+                            <td>@(req.OutageDateTime?.ToString("yyyy-MM-dd HH:mm"))</td>
+                            <td>@req.OutageRemarks</td>
+                            <td>@req.OutageTag</td>
+                            <td>@req.RTOutageId</td>
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ElementName</th>
+                        <th>ElementType</th>
+                        <th>OutageType</th>
+                        <th>Reason</th>
+                        <th>OutageDateTime</th>
+                        <th>OutageRemarks</th>
+                        <th>OutageTag</th>
+                        <th>RTOutageId</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+
+    @section Scripts{
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" href="~/css/datatables/select.bootstrap5.min.css" />
+<script src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/js/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/js/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script src="~/js/node_modules/datatables.net-select/js/dataTables.select.min.js"></script>
+<script>
+    function strtrunc(str, max, add) {
+        add = add || '...';
+        return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
+    $(document).ready(function () {
+        // https://datatables.net/examples/api/multi_filter.html
+        // Setup - add a text input to each footer cell
+        $('#display_table tfoot th').each(function () {
+            //var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search" />');
+        });
+        var display_table = $('#display_table').DataTable({
+            fixedHeader: true,
+            "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "select":true,
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            "order": [[0, "asc"]],
+            buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']
+        });
+        var r = $('#display_table tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', '3px');
+        });
+        $('#display_table thead').append(r);
+        // Apply the filter
+        // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+        $("#display_table thead input").on('keyup change', function () {
+            display_table
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+        // hide the last column that contains element ID
+        display_table.column(-1).visible(false);
+
+        // setup row selection listener
+        $('#display_table').on('select.dt', function(e, dt, type, indexes) {
+            // get the array of selected rows
+            const selectedRows = dt.rows(indexes).data();
+            // console.log(selectedRows);
+            if(selectedRows.length == 0){
+                console.log("table rows not selected but trigger fired...");
+            }
+            // get the selected row data
+            const rowData = selectedRows[0];
+
+            // display select element name
+            const elName = rowData[0];
+            document.getElementById("selApprovalDisplaySpan").innerHTML = elName;
+
+            // populate selected shutdown request Id in form
+            const sdRequestId = rowData[rowData.length-1];
+            document.getElementsByName("NewReq.OutageId")[0].value = sdRequestId;
+        });
+    });
+
+</script>
+<style>
+    thead input {
+        padding: 2px;
+        box-sizing: border-box;
+        font-size: small;
+        width: 100%
+    }
+</style>
+    }
+}
+else
+{
+    <div class="container">
+        <h4>Ouatge Requests not present</h4>
+    </div>
+}

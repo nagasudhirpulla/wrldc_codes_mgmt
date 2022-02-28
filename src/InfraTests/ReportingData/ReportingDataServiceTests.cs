@@ -43,4 +43,11 @@ public class ReportingDataServiceTests
         List<ReportingOutageRequest> outageRequests = _reportingDataService.GetApprovedOutageRequestsForDate(inpDate);
         Assert.IsTrue(outageRequests.Count > 0);
     }
+
+    [TestMethod()]
+    public void GetUnrevivedOutagesTest()
+    {
+        List<ReportingUnrevivedOutage> unrevOutages = _reportingDataService.GetLatestUnrevivedOutages();
+        Assert.IsTrue(unrevOutages.Count > 0);
+    }
 }
