@@ -26,6 +26,7 @@
             <table class="table table-bordered table-hover display" id="display_table">
                 <thead>
                     <tr>
+                        <th>Created</th>
                         <th>Request State</th>
                         <th>Element</th>
                         <th>Requester</th>
@@ -45,6 +46,7 @@
                     @foreach (var req in Model.ReqList)
                     {
                         <tr>
+                            <td>@req.Created.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@req.RequestState?.Name</td>
                             <td>@req.ElementName</td>
                             <td>@req.Requester</td>
@@ -64,6 +66,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <th>Created</th>
                         <th>Request State</th>
                         <th>Element</th>
                         <th>Requester</th>

@@ -1,7 +1,7 @@
 ﻿@page
 @model CreateOutageRevivalReqModel
 @{
-    ViewData["Title"] = "Create Unrevive Outage Code Request";
+    ViewData["Title"] = "Create Revival Code Request";
 }
 @if (Model != null && Model.UnrevOtgs.Count > 0)
 {
@@ -15,8 +15,13 @@
                 <input asp-for="Outage.OutageId" type="hidden" />
 
                 <h4><span>Selected Element = </span><span id="selApprovalDisplaySpan">--Please select from below table--</span></h4>
+                <div class="form-group">
+                    <label asp-for="Outage.Remarks"></label>
+                    <input asp-for="Outage.Remarks" class="form-control" />
+                    <span asp-validation-for="Outage.Remarks" class="text-danger"></span>
+                </div>
 
-                <button type="submit" class="btn btn-success">Create Approved Outage Code Request</button>
+                <button type="submit" class="btn btn-success mt-2">Create Revival Code Request</button>
             </form>
         </div>
     </div>
@@ -142,7 +147,7 @@
 
             // populate selected shutdown request Id in form
             const sdRequestId = rowData[rowData.length-1];
-            document.getElementsByName("NewReq.OutageId")[0].value = sdRequestId;
+            document.getElementsByName("Outage.OutageId")[0].value = sdRequestId;
         });
     });
 

@@ -47,7 +47,7 @@ public class ReportingDataServiceTests
     [TestMethod()]
     public void GetUnrevivedOutagesTest()
     {
-        List<ReportingUnrevivedOutage> unrevOutages = _reportingDataService.GetLatestUnrevivedOutages();
+        List<ReportingOutage> unrevOutages = _reportingDataService.GetLatestUnrevivedOutages();
         Assert.IsTrue(unrevOutages.Count > 0);
     }
 }

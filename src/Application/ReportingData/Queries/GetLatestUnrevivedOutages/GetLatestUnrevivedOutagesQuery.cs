@@ -3,10 +3,10 @@ using MediatR;
 
 namespace Application.ReportingData.Queries.GetLatestUnrevivedOutages;
 
-public class GetLatestUnrevivedOutagesQuery : IRequest<List<ReportingUnrevivedOutage>>
+public class GetLatestUnrevivedOutagesQuery : IRequest<List<ReportingOutage>>
 {
     public DateTime ReqDt { get; set; }
-    public class GetLatestUnrevivedOutagesQueryHandler : IRequestHandler<GetLatestUnrevivedOutagesQuery, List<ReportingUnrevivedOutage>>
+    public class GetLatestUnrevivedOutagesQueryHandler : IRequestHandler<GetLatestUnrevivedOutagesQuery, List<ReportingOutage>>
     {
         private readonly IReportingDataService _reportingService;
 
@@ -15,9 +15,9 @@ public class GetLatestUnrevivedOutagesQuery : IRequest<List<ReportingUnrevivedOu
             _reportingService = reportingService;
         }
 
-        public async Task<List<ReportingUnrevivedOutage>> Handle(GetLatestUnrevivedOutagesQuery request, CancellationToken cancellationToken)
+        public async Task<List<ReportingOutage>> Handle(GetLatestUnrevivedOutagesQuery request, CancellationToken cancellationToken)
         {
-            List<ReportingUnrevivedOutage> latestUnrevOutages = _reportingService.GetLatestUnrevivedOutages();
+            List<ReportingOutage> latestUnrevOutages = _reportingService.GetLatestUnrevivedOutages();
             return await Task.FromResult(latestUnrevOutages);
         }
     }

@@ -146,7 +146,7 @@ public class CreateApprovedOutageCodeRequestCommandHandler : IRequestHandler<Cre
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-            _logger.LogError("rolling back DB transaction while creting approved outage code request creation, {message}", ex.Message);
+            _logger.LogError("rolling back DB transaction while approved outage code request creation, {message}", ex.Message);
             throw;
         }
 

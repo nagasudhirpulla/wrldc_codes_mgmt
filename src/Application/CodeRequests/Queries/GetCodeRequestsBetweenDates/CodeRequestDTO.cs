@@ -8,6 +8,7 @@ namespace Application.CodeRequests.Queries.GetCodeRequestsBetweenDates;
 
 public class CodeRequestDTO : IMapFrom<CodeRequest>
 {
+    public DateTime Created { get; set; }
     public CodeType? CodeType { get; set; }
     public CodeRequestStatus? RequestState { get; set; }
 

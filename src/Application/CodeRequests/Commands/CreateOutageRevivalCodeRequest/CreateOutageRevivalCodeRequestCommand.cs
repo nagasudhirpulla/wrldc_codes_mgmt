@@ -8,6 +8,7 @@ namespace Application.CodeRequests.Commands.CreateOutageRevivalCodeRequest;
 public class CreateOutageRevivalCodeRequestCommand : IRequest<List<string>>, IMapFrom<CodeRequest>
 {
     public int OutageId { get; set; }
+    public string? Remarks { get; set; }
 
     public void Mapping(Profile profile)
     {

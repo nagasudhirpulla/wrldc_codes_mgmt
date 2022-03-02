@@ -328,12 +328,12 @@ public class ReportingDataService : IReportingDataService
         return elementowners;
     }
 
-    public List<ReportingUnrevivedOutage> GetLatestUnrevivedOutages()
+    public List<ReportingOutage> GetLatestUnrevivedOutages()
     {
-        List<ReportingUnrevivedOutage> unrevivedOutages;
+        List<ReportingOutage> unrevivedOutages;
         try
         {
-            unrevivedOutages = GetLatestUnrevivedOutagesQuery.Execute(_reportingConnStr);
+            unrevivedOutages = GetLatestOutagesQuery.Execute(_reportingConnStr, true, null);
         }
         catch (Exception ex)
         {
@@ -343,5 +343,24 @@ public class ReportingDataService : IReportingDataService
         return unrevivedOutages;
     }
 
-    
+    public ReportingOutage? GetLatestOutageById(int outageId)
+    {
+        ReportingOutage? outage = null;
+        try
+        {
+            List<ReportingOutage>? outages = GetLatestOutagesQuery.Execute(_reportingConnStr, false, outageId);
+            if (outages != null && outages.Count == 1)
+            {
+                outage = outages[0];
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting outage by Id, {msg}", ex.Message);
+            outage = null;
+        }
+        return outage;
+    }
+
+
 }
