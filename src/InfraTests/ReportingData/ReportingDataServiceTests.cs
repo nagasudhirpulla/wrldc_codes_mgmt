@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Infra.ReportingData;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using WebApp;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Core.ReportingData;
 using System;
+using Core.ReportingData.GetElementsForDisplay;
 
 namespace Infra.ReportingData.Tests;
 
@@ -49,5 +51,82 @@ public class ReportingDataServiceTests
     {
         List<ReportingOutage> unrevOutages = _reportingDataService.GetLatestUnrevivedOutages();
         Assert.IsTrue(unrevOutages.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllBusesTest()
+    {
+        List<ReportingBus> allBuses = _reportingDataService.GetAllBuses();
+        Assert.IsTrue(allBuses.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllBaysTest()
+    {
+        List<ReportingBay> allBays = _reportingDataService.GetAllBays();
+        Assert.IsTrue(allBays.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllBusReactorsTest()
+    {
+        List<ReportingBusReactor> allBusReactors = _reportingDataService.GetAllBusReactors();
+        Assert.IsTrue(allBusReactors.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllFSCsTest()
+    {
+        List<ReportingFSC> allFSCs = _reportingDataService.GetAllFSCs();
+        Assert.IsTrue(allFSCs.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllGeneratingUnitsTest()
+    {
+        List<ReportingGeneratingUnit> allGeneratingUnits = _reportingDataService.GetAllGeneratingUnits();
+        Assert.IsTrue(allGeneratingUnits.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllHVDCLineCrktsTest()
+    {
+        List<ReportingHVDCLineCrkt> allHVDCLineCrkts = _reportingDataService.GetAllHVDCLineCrkts();
+        Assert.IsTrue(allHVDCLineCrkts.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllHVDCPolesTest()
+    {
+        List<ReportingHVDCPole> allHVDCPoles = _reportingDataService.GetAllHVDCPoles();
+        Assert.IsTrue(allHVDCPoles.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllLineReactorsTest()
+    {
+        List<ReportingLineReactor> allLineReactors = _reportingDataService.GetAllLineReactors();
+        Assert.IsTrue(allLineReactors.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllTransformersTest()
+    {
+        List<ReportingTransformer> allTransformers = _reportingDataService.GetAllTransformers();
+        Assert.IsTrue(allTransformers.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllTransmissionLineCktsTest()
+    {
+        List<ReportingTransmissionLineCkt> allTransmissionLineCkts = _reportingDataService.GetAllTransmissionLineCkts();
+        Assert.IsTrue(allTransmissionLineCkts.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetAllCompensatorsTest()
+    {
+        List<ReportingCompensator> allCompensators = _reportingDataService.GetAllCompensators();
+        Assert.IsTrue(allCompensators.Count > 0);
     }
 }

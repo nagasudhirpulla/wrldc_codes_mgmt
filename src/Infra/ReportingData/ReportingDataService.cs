@@ -1,5 +1,7 @@
 ﻿using Core.ReportingData;
+using Core.ReportingData.GetElementsForDisplay;
 using Infra.ReportingData.SingleElementOwnerQueries;
+using Infra.ReportingData.AllElementForDispQueries;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
@@ -362,5 +364,168 @@ public class ReportingDataService : IReportingDataService
         return outage;
     }
 
+    public List<ReportingBay> GetAllBays()
+    {
+        List<ReportingBay> allBays;
+        try
+        {
+            allBays = GetAllBaysQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allBays = new();
+        }
+        return allBays;
+    }
 
+    public List<ReportingBus> GetAllBuses()
+    {
+        List<ReportingBus> allBuses;
+        try
+        {
+            allBuses = GetAllBusesQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allBuses = new();
+        }
+        return allBuses;
+    }
+
+    public List<ReportingBusReactor> GetAllBusReactors()
+    {
+        List<ReportingBusReactor> allBusReactors;
+        try
+        {
+            allBusReactors = GetAllBusReactorsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allBusReactors = new();
+        }
+        return allBusReactors;
+    }
+
+    public List<ReportingFSC> GetAllFSCs()
+    {
+        List<ReportingFSC> allFSCs;
+        try
+        {
+            allFSCs = GetAllFSCsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allFSCs = new();
+        }
+        return allFSCs;
+    }
+
+    public List<ReportingGeneratingUnit> GetAllGeneratingUnits()
+    {
+        List<ReportingGeneratingUnit> allGeneratingUnits;
+        try
+        {
+            allGeneratingUnits = GetAllGeneratingUnitsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allGeneratingUnits = new();
+        }
+        return allGeneratingUnits;
+    }
+
+    public List<ReportingHVDCLineCrkt> GetAllHVDCLineCrkts()
+    {
+        List<ReportingHVDCLineCrkt> allHVDCLineCrkts;
+        try
+        {
+            allHVDCLineCrkts = GetAllHVDCLineCrktsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allHVDCLineCrkts = new();
+        }
+        return allHVDCLineCrkts;
+    }
+
+    public List<ReportingHVDCPole> GetAllHVDCPoles()
+    {
+        List<ReportingHVDCPole> allHVDCPoles;
+        try
+        {
+            allHVDCPoles = GetAllHVDCPolesQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allHVDCPoles = new();
+        }
+        return allHVDCPoles;
+    }
+
+    public List<ReportingLineReactor> GetAllLineReactors()
+    {
+        List<ReportingLineReactor> allLineReactors;
+        try
+        {
+            allLineReactors = GetAllLineReactorsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allLineReactors = new();
+        }
+        return allLineReactors;
+    }
+
+    public List<ReportingTransformer> GetAllTransformers()
+    {
+        List<ReportingTransformer> allTransformers;
+        try
+        {
+            allTransformers = GetAllTransformersQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allTransformers = new();
+        }
+        return allTransformers;
+    }
+
+    public List<ReportingTransmissionLineCkt> GetAllTransmissionLineCkts()
+    {
+        List<ReportingTransmissionLineCkt> allTransmissionLineCkts;
+        try
+        {
+            allTransmissionLineCkts = GetAllTransmissionLineCktsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allTransmissionLineCkts = new();
+        }
+        return allTransmissionLineCkts;
+    }
+
+    public List<ReportingCompensator> GetAllCompensators()
+    {
+        List<ReportingCompensator> allCompensators;
+        try
+        {
+            allCompensators = GetAllCompensatorsQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            allCompensators = new();
+        }
+        return allCompensators;
+    }
 }

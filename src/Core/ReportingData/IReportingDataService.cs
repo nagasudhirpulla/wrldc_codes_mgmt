@@ -1,4 +1,6 @@
-﻿namespace Core.ReportingData;
+﻿using Core.ReportingData.GetElementsForDisplay;
+
+namespace Core.ReportingData;
 
 public interface IReportingDataService
 {
@@ -20,5 +22,19 @@ public interface IReportingDataService
     List<ReportingOwner> GetTransformerOwners(int id);
     List<ReportingOutage> GetLatestUnrevivedOutages();
     ReportingOutage? GetLatestOutageById(int outageId);
+
+
+
+    List<ReportingBay> GetAllBays();
+    List<ReportingBus> GetAllBuses();
+    List<ReportingBusReactor> GetAllBusReactors();
+    List<ReportingCompensator> GetAllCompensators();
+    List<ReportingFSC> GetAllFSCs();
+    List<ReportingGeneratingUnit> GetAllGeneratingUnits();
+    List<ReportingHVDCLineCrkt> GetAllHVDCLineCrkts();
+    List<ReportingHVDCPole> GetAllHVDCPoles();
+    List<ReportingLineReactor> GetAllLineReactors();
+    List<ReportingTransformer> GetAllTransformers();
+    List<ReportingTransmissionLineCkt> GetAllTransmissionLineCkts();
 
 }
