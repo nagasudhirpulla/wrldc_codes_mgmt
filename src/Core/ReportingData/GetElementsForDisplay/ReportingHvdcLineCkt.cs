@@ -1,6 +1,6 @@
 ﻿namespace Core.ReportingData.GetElementsForDisplay;
 
-public class ReportingHVDCLineCrkt
+public class ReportingHvdcLineCkt
 {
     public int HlcId  { get; set; }
     public string HlcName  { get; set; }

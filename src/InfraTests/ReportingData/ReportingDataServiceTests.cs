@@ -77,7 +77,7 @@ public class ReportingDataServiceTests
     [TestMethod()]
     public void GetAllFSCsTest()
     {
-        List<ReportingFSC> allFSCs = _reportingDataService.GetAllFSCs();
+        List<ReportingFsc> allFSCs = _reportingDataService.GetAllFscs();
         Assert.IsTrue(allFSCs.Count > 0);
     }
 
@@ -91,14 +91,14 @@ public class ReportingDataServiceTests
     [TestMethod()]
     public void GetAllHVDCLineCrktsTest()
     {
-        List<ReportingHVDCLineCrkt> allHVDCLineCrkts = _reportingDataService.GetAllHVDCLineCrkts();
+        List<ReportingHvdcLineCkt> allHVDCLineCrkts = _reportingDataService.GetAllHvdcLineCkts();
         Assert.IsTrue(allHVDCLineCrkts.Count > 0);
     }
 
     [TestMethod()]
     public void GetAllHVDCPolesTest()
     {
-        List<ReportingHVDCPole> allHVDCPoles = _reportingDataService.GetAllHVDCPoles();
+        List<ReportingHvdcPole> allHVDCPoles = _reportingDataService.GetAllHvdcPoles();
         Assert.IsTrue(allHVDCPoles.Count > 0);
     }
 

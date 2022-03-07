@@ -2,30 +2,27 @@
 using Core.ReportingData.GetElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Infra.ReportingData.AllElementForDispQueries;
+namespace Infra.ReportingData.ElementsDisplayQueries;
 
-internal class GetAllBusesQuery
+internal class GetAllCompensatorsQuery
 {
-    public static List<ReportingBus> Execute(string _reportingConnStr)
+    public static List<ReportingCompensator> Execute(string _reportingConnStr)
     {
-        List<ReportingBus> allBuses = new();
+        List<ReportingCompensator> allCompensators = new();
 
         using OracleConnection con = new(_reportingConnStr);
 
         using OracleCommand cmd = con.CreateCommand();
         con.Open();
         cmd.CommandText = @"SELECT
-                            b.id,
-                            b.bus_name,
-                            b.bus_number,
-                            vol.trans_element_type AS voltage,
-                            as2.substation_name,
+                            t.id,
+                            t.tcsc_name,
+                            t.perc_variable_compensation,
+                            t.perc_fixed_compensation,
                             owner_details.owners,
                             owner_details.owner_ids
                         FROM
-                            reporting_web_ui_uat.bus                       b
-                            LEFT JOIN reporting_web_ui_uat.associate_substation      as2 ON as2.id = b.fk_substation_id
-                            LEFT JOIN reporting_web_ui_uat.trans_element_type_master vol ON vol.trans_element_type_id = b.voltage
+                            reporting_web_ui_uat.tcsc t
                             LEFT JOIN (
                                 SELECT
                                     LISTAGG(own.owner_name, ',') WITHIN GROUP(
@@ -42,26 +39,27 @@ internal class GetAllBusesQuery
                                     LEFT JOIN reporting_web_ui_uat.owner              own ON own.id = ent_reln.child_entity_attribute_id
                                 WHERE
                                         ent_reln.child_entity = 'OWNER'
-                                    AND ent_reln.parent_entity = 'ASSOCIATE_SUBSTATION'
+                                    AND ent_reln.parent_entity IN ( 'STATCOM', 'TCSC', 'MSR', 'MSC' )
                                     AND ent_reln.child_entity_attribute = 'OwnerId'
                                     AND ent_reln.parent_entity_attribute = 'Owner'
                                 GROUP BY
                                     parent_entity_attribute_id
-                            )                                              owner_details ON owner_details.element_id = as2.id";
+                            )                         owner_details ON owner_details.element_id = t.id";
+
         OracleDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            ReportingBus? obj = new();
-            obj.BusId = DbUtils.SafeGetInt(reader, "ID");
-            obj.BusName = DbUtils.SafeGetString(reader, "BUS_NAME");
-            obj.BusNumber = DbUtils.SafeGetInt(reader, "BUS_NUMBER");
-            obj.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
-            obj.Voltage = DbUtils.SafeGetString(reader, "VOLTAGE");
-            obj.Owners = DbUtils.SafeGetString(reader, "OWNERS");
-            obj.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
-            allBuses.Add(obj);
+            ReportingCompensator? comp = new();
+            comp.CmpstrId = DbUtils.SafeGetInt(reader, "ID");
+            comp.TcscName = DbUtils.SafeGetString(reader, "TCSC_NAME");
+            comp.PercVarCmpstr = DbUtils.SafeGetInt(reader, "PERC_VARIABLE_COMPENSATION");
+            comp.PercFxdCmpstr = DbUtils.SafeGetInt(reader, "PERC_FIXED_COMPENSATION");
+            comp.Owners = DbUtils.SafeGetString(reader, "OWNERS");
+            comp.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
+            allCompensators.Add(comp);
         }
         reader.Dispose();
-        return allBuses;
+
+        return allCompensators;
     }
 }

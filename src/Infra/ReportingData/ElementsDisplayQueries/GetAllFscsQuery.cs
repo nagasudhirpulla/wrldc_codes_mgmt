@@ -2,27 +2,27 @@
 using Core.ReportingData.GetElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Infra.ReportingData.AllElementForDispQueries;
+namespace Infra.ReportingData.ElementsDisplayQueries;
 
-internal class GetAllCompensatorsQuery
+internal class GetAllFscsQuery
 {
-    public static List<ReportingCompensator> Execute(string _reportingConnStr)
+    public static List<ReportingFsc> Execute(string _reportingConnStr)
     {
-        List<ReportingCompensator> allCompensators = new();
+        List<ReportingFsc> allFSCs = new();
 
         using OracleConnection con = new(_reportingConnStr);
 
         using OracleCommand cmd = con.CreateCommand();
         con.Open();
         cmd.CommandText = @"SELECT
-                            t.id,
-                            t.tcsc_name,
-                            t.perc_variable_compensation,
-                            t.perc_fixed_compensation,
+                            f.id,
+                            f.fsc_name,
+                            as2.substation_name,
                             owner_details.owners,
                             owner_details.owner_ids
                         FROM
-                            reporting_web_ui_uat.tcsc t
+                            reporting_web_ui_uat.fsc                  f
+                            LEFT JOIN reporting_web_ui_uat.associate_substation as2 ON as2.id = f.fk_substation
                             LEFT JOIN (
                                 SELECT
                                     LISTAGG(own.owner_name, ',') WITHIN GROUP(
@@ -39,27 +39,25 @@ internal class GetAllCompensatorsQuery
                                     LEFT JOIN reporting_web_ui_uat.owner              own ON own.id = ent_reln.child_entity_attribute_id
                                 WHERE
                                         ent_reln.child_entity = 'OWNER'
-                                    AND ent_reln.parent_entity IN ( 'STATCOM', 'TCSC', 'MSR', 'MSC' )
+                                    AND ent_reln.parent_entity = 'FSC'
                                     AND ent_reln.child_entity_attribute = 'OwnerId'
                                     AND ent_reln.parent_entity_attribute = 'Owner'
                                 GROUP BY
                                     parent_entity_attribute_id
-                            )                         owner_details ON owner_details.element_id = t.id";
-        
+                            )                                         owner_details ON owner_details.element_id = f.id";
         OracleDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            ReportingCompensator? obj = new();
-            obj.CmpstrId = DbUtils.SafeGetInt(reader, "ID");
-            obj.TcscName = DbUtils.SafeGetString(reader, "TCSC_NAME");
-            obj.PercVarCmpstr = DbUtils.SafeGetInt(reader, "PERC_VARIABLE_COMPENSATION");
-            obj.PercFxdCmpstr = DbUtils.SafeGetInt(reader, "PERC_FIXED_COMPENSATION");
-            obj.Owners = DbUtils.SafeGetString(reader, "OWNERS");
-            obj.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
-            allCompensators.Add(obj);
+            ReportingFsc? fsc = new();
+            fsc.FSCId = DbUtils.SafeGetInt(reader, "ID");
+            fsc.FSCName = DbUtils.SafeGetString(reader, "FSC_NAME");
+            fsc.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
+            fsc.Owners = DbUtils.SafeGetString(reader, "OWNERS");
+            fsc.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
+            allFSCs.Add(fsc);
         }
         reader.Dispose();
 
-        return allCompensators;
+        return allFSCs;
     }
 }

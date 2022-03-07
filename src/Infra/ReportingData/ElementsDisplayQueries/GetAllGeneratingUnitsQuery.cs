@@ -2,28 +2,30 @@
 using Core.ReportingData.GetElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Infra.ReportingData.AllElementForDispQueries;
+namespace Infra.ReportingData.ElementsDisplayQueries;
 
-internal class GetAllBusReactorsQuery
+internal class GetAllGeneratingUnitsQuery
 {
-    public static List<ReportingBusReactor> Execute(string _reportingConnStr)
+    public static List<ReportingGeneratingUnit> Execute(string _reportingConnStr)
     {
-        List<ReportingBusReactor> allBusReactors = new();
+        List<ReportingGeneratingUnit> allGeneratingUnits = new();
 
         using OracleConnection con = new(_reportingConnStr);
 
         using OracleCommand cmd = con.CreateCommand();
         con.Open();
         cmd.CommandText = @"SELECT
-                            br.id,
-                            br.reactor_name,
-                            br.mvar_capacity,
-                            as2.substation_name,
+                            gu.id,
+                            gu.unit_name,
+                            gu.unit_number,
+                            gu.installed_capacity,
+                            gu.mva_capacity,
+                            vol.trans_element_type AS generating_voltage,
                             owner_details.owners,
                             owner_details.owner_ids
                         FROM
-                            reporting_web_ui_uat.bus_reactor          br
-                            LEFT JOIN reporting_web_ui_uat.associate_substation as2 ON as2.id = br.fk_substation
+                            reporting_web_ui_uat.generating_unit           gu
+                            LEFT JOIN reporting_web_ui_uat.trans_element_type_master vol ON vol.trans_element_type_id = gu.generating_voltage_kv
                             LEFT JOIN (
                                 SELECT
                                     LISTAGG(own.owner_name, ',') WITHIN GROUP(
@@ -39,27 +41,29 @@ internal class GetAllBusReactorsQuery
                                     reporting_web_ui_uat.entity_entity_reln ent_reln
                                     LEFT JOIN reporting_web_ui_uat.owner              own ON own.id = ent_reln.child_entity_attribute_id
                                 WHERE
-                                        ent_reln.child_entity = 'OWNER'
-                                    AND ent_reln.parent_entity = 'BUS_REACTOR'
+                                        ent_reln.child_entity = 'Owner'
+                                    AND ent_reln.parent_entity = 'GENERATING_STATION'
                                     AND ent_reln.child_entity_attribute = 'OwnerId'
                                     AND ent_reln.parent_entity_attribute = 'Owner'
                                 GROUP BY
                                     parent_entity_attribute_id
-                            )                                         owner_details ON owner_details.element_id = br.id";
+                            )                                              owner_details ON owner_details.element_id = gu.fk_generating_station";
         OracleDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            ReportingBusReactor? obj = new();
-            obj.BrId = DbUtils.SafeGetInt(reader, "ID");
-            obj.BReactorName = DbUtils.SafeGetString(reader, "REACTOR_NAME");
-            obj.MvarCapacity = DbUtils.SafeGetString(reader, "MVAR_CAPACITY");
-            obj.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
-            obj.Owners = DbUtils.SafeGetString(reader, "OWNERS");
-            obj.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
-            allBusReactors.Add(obj);
+            ReportingGeneratingUnit? gu = new();
+            gu.GuId = DbUtils.SafeGetInt(reader, "ID");
+            gu.UnitName = DbUtils.SafeGetString(reader, "UNIT_NAME");
+            gu.UnitNumber = DbUtils.SafeGetInt(reader, "UNIT_NUMBER");
+            gu.InstalledCapacity = DbUtils.SafeGetInt(reader, "INSTALLED_CAPACITY");
+            gu.MVACapacity = DbUtils.SafeGetInt(reader, "MVA_CAPACITY");
+            gu.GeneratingVol = DbUtils.SafeGetString(reader, "GENERATING_VOLTAGE");
+            gu.Owners = DbUtils.SafeGetString(reader, "OWNERS");
+            gu.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
+            allGeneratingUnits.Add(gu);
         }
         reader.Dispose();
 
-        return allBusReactors;
+        return allGeneratingUnits;
     }
 }

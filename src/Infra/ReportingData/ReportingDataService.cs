@@ -1,10 +1,10 @@
 ﻿using Core.ReportingData;
 using Core.ReportingData.GetElementsForDisplay;
 using Infra.ReportingData.SingleElementOwnerQueries;
-using Infra.ReportingData.AllElementForDispQueries;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
+using Infra.ReportingData.ElementsDisplayQueries;
 
 namespace Infra.ReportingData;
 
@@ -409,12 +409,12 @@ public class ReportingDataService : IReportingDataService
         return allBusReactors;
     }
 
-    public List<ReportingFSC> GetAllFSCs()
+    public List<ReportingFsc> GetAllFscs()
     {
-        List<ReportingFSC> allFSCs;
+        List<ReportingFsc> allFSCs;
         try
         {
-            allFSCs = GetAllFSCsQuery.Execute(_reportingConnStr);
+            allFSCs = GetAllFscsQuery.Execute(_reportingConnStr);
         }
         catch (Exception ex)
         {
@@ -439,12 +439,12 @@ public class ReportingDataService : IReportingDataService
         return allGeneratingUnits;
     }
 
-    public List<ReportingHVDCLineCrkt> GetAllHVDCLineCrkts()
+    public List<ReportingHvdcLineCkt> GetAllHvdcLineCkts()
     {
-        List<ReportingHVDCLineCrkt> allHVDCLineCrkts;
+        List<ReportingHvdcLineCkt> allHVDCLineCrkts;
         try
         {
-            allHVDCLineCrkts = GetAllHVDCLineCrktsQuery.Execute(_reportingConnStr);
+            allHVDCLineCrkts = GetAllHvdcLineCktsQuery.Execute(_reportingConnStr);
         }
         catch (Exception ex)
         {
@@ -454,12 +454,12 @@ public class ReportingDataService : IReportingDataService
         return allHVDCLineCrkts;
     }
 
-    public List<ReportingHVDCPole> GetAllHVDCPoles()
+    public List<ReportingHvdcPole> GetAllHvdcPoles()
     {
-        List<ReportingHVDCPole> allHVDCPoles;
+        List<ReportingHvdcPole> allHVDCPoles;
         try
         {
-            allHVDCPoles = GetAllHVDCPolesQuery.Execute(_reportingConnStr);
+            allHVDCPoles = GetAllHvdcPolesQuery.Execute(_reportingConnStr);
         }
         catch (Exception ex)
         {

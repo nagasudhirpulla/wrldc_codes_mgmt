@@ -1,6 +1,6 @@
 ﻿namespace Core.ReportingData.GetElementsForDisplay;
 
-public class ReportingFSC
+public class ReportingFsc
 {
     public int FSCId  { get; set; }
     public string FSCName  { get; set; }

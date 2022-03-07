@@ -1,6 +1,6 @@
 ﻿namespace Core.ReportingData.GetElementsForDisplay;
 
-public class ReportingHVDCPole
+public class ReportingHvdcPole
 {
     public int HVDCPId  { get; set; }
     public string PoleName  { get; set; }

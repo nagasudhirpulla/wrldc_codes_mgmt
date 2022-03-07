@@ -1,13 +1,14 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData;
+using Core.ReportingData.GetElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
-namespace Infra.ReportingData.AllElementForDispQueries;
+namespace Infra.ReportingData.ElementsDisplayQueries;
 
-internal class GetAllBaysQuery
+internal class GetAllBusesQuery
 {
-    public static List<ReportingBay> Execute(string _reportingConnStr)
+    public static List<ReportingBus> Execute(string _reportingConnStr)
     {
-        List<ReportingBay> allBays = new();
+        List<ReportingBus> allBuses = new();
 
         using OracleConnection con = new(_reportingConnStr);
 
@@ -15,18 +16,16 @@ internal class GetAllBaysQuery
         con.Open();
         cmd.CommandText = @"SELECT
                             b.id,
-                            b.bay_name,
-                            b.bay_number,
-                            as2.substation_name,
-                            bt.type,
+                            b.bus_name,
+                            b.bus_number,
                             vol.trans_element_type AS voltage,
+                            as2.substation_name,
                             owner_details.owners,
                             owner_details.owner_ids
                         FROM
-                            reporting_web_ui_uat.bay                       b
-                            LEFT JOIN reporting_web_ui_uat.bay_type                  bt ON bt.id = b.bay_type_id
-                            LEFT JOIN reporting_web_ui_uat.associate_substation      as2 ON as2.id = b.station_id
-                            LEFT JOIN reporting_web_ui_uat.trans_element_type_master vol ON vol.trans_element_type_id = b.voltage_id
+                            reporting_web_ui_uat.bus                       b
+                            LEFT JOIN reporting_web_ui_uat.associate_substation      as2 ON as2.id = b.fk_substation_id
+                            LEFT JOIN reporting_web_ui_uat.trans_element_type_master vol ON vol.trans_element_type_id = b.voltage
                             LEFT JOIN (
                                 SELECT
                                     LISTAGG(own.owner_name, ',') WITHIN GROUP(
@@ -43,30 +42,26 @@ internal class GetAllBaysQuery
                                     LEFT JOIN reporting_web_ui_uat.owner              own ON own.id = ent_reln.child_entity_attribute_id
                                 WHERE
                                         ent_reln.child_entity = 'OWNER'
-                                    AND ent_reln.parent_entity = 'BAY'
+                                    AND ent_reln.parent_entity = 'ASSOCIATE_SUBSTATION'
                                     AND ent_reln.child_entity_attribute = 'OwnerId'
                                     AND ent_reln.parent_entity_attribute = 'Owner'
                                 GROUP BY
                                     parent_entity_attribute_id
-                            )                                              owner_details ON owner_details.element_id = b.id";
-        
+                            )                                              owner_details ON owner_details.element_id = as2.id";
         OracleDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            ReportingBay? obj = new();
-            obj.BayId = DbUtils.SafeGetInt(reader, "ID");
-            obj.BayName = DbUtils.SafeGetString(reader, "BAY_NAME");
-            //Bay number is string
-            obj.BayNumber = DbUtils.SafeGetString(reader, "BAY_NUMBER");
-            obj.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
-            obj.Type = DbUtils.SafeGetString(reader, "TYPE");
-            obj.Voltage = DbUtils.SafeGetString(reader, "VOLTAGE");
-            obj.Owners = DbUtils.SafeGetString(reader, "OWNERS");
-            obj.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
-            allBays.Add(obj);
+            ReportingBus? bus = new();
+            bus.BusId = DbUtils.SafeGetInt(reader, "ID");
+            bus.BusName = DbUtils.SafeGetString(reader, "BUS_NAME");
+            bus.BusNumber = DbUtils.SafeGetInt(reader, "BUS_NUMBER");
+            bus.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
+            bus.Voltage = DbUtils.SafeGetString(reader, "VOLTAGE");
+            bus.Owners = DbUtils.SafeGetString(reader, "OWNERS");
+            bus.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");
+            allBuses.Add(bus);
         }
         reader.Dispose();
-
-        return allBays;
+        return allBuses;
     }
 }

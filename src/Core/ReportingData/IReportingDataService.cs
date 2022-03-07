@@ -29,10 +29,10 @@ public interface IReportingDataService
     List<ReportingBus> GetAllBuses();
     List<ReportingBusReactor> GetAllBusReactors();
     List<ReportingCompensator> GetAllCompensators();
-    List<ReportingFSC> GetAllFSCs();
+    List<ReportingFsc> GetAllFscs();
     List<ReportingGeneratingUnit> GetAllGeneratingUnits();
-    List<ReportingHVDCLineCrkt> GetAllHVDCLineCrkts();
-    List<ReportingHVDCPole> GetAllHVDCPoles();
+    List<ReportingHvdcLineCkt> GetAllHvdcLineCkts();
+    List<ReportingHvdcPole> GetAllHvdcPoles();
     List<ReportingLineReactor> GetAllLineReactors();
     List<ReportingTransformer> GetAllTransformers();
     List<ReportingTransmissionLineCkt> GetAllTransmissionLineCkts();
