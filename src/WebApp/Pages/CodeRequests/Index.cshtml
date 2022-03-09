@@ -1,4 +1,5 @@
 ﻿@page
+@using Application.Users
 @model WebApp.Pages.CodeRequests.IndexModel
 @{
     ViewData["Title"] = "Manage Code Requests";
@@ -22,7 +23,7 @@
 {
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-12">
-            <hr/>
+            <hr />
             <table class="table table-bordered table-hover display" id="display_table">
                 <thead>
                     <tr>
@@ -40,6 +41,7 @@
                         <th>Desired End</th>
                         <th>Element Owners</th>
                         <th>Concerned Stakeholders</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,6 +62,14 @@
                             <td>@req.DesiredExecutionEndTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@(string.Join(",",req.ElementOwners.Select(x=>x.Name)))</td>
                             <td>@(string.Join(",",req.ConcernedStakeholders.Select(x=>x.DisplayName)))</td>
+                            @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            {
+                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Edit</a> | <a asp-page="./Delete" asp-route-id="@req.Id">Delete</a></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
                         </tr>
                     }
 
@@ -80,6 +90,7 @@
                         <th>Desired End</th>
                         <th>Element Owners</th>
                         <th>Concerned Stakeholders</th>
+                        <th>Actions</th>
                     </tr>
                 </tfoot>
             </table>

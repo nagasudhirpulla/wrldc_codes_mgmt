@@ -1,5 +1,4 @@
-﻿using Infra.ReportingData;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using WebApp;

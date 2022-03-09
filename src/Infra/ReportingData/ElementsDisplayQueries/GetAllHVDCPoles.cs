@@ -1,5 +1,4 @@
-﻿using Core.ReportingData;
-using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.GetElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
