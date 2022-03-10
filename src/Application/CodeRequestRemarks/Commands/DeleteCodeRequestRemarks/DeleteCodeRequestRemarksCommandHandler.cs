@@ -1,4 +1,4 @@
-﻿using Application.CodeReqRemarks.Commands.DeleteCodeReqRemarks;
+﻿using Application.CodeRequestRemarks.Commands.DeleteCodeRequestRemarks;
 using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

@@ -143,12 +143,12 @@
                     <span>Stakeholder = @item.Stakeholder?.DisplayName</span><br />
                     <span>RLDC remarks = @item.RldcRemarks</span><br />
                     <span>Stakeholder remarks = @item.Remarks</span><br />
-                    <span>TODO link to page that deletes the consent request page</span><br />
+                    <span>@item.Stakeholder?.DisplayName | <a asp-page="/CodeRequestRemarks/Delete" asp-route-id="@item.Id">Delete</a></span><br />
                 </div>
             </li>
         }
     </ul>
-    <a asp-page="/CodeRequestRemarks/Create" asp-route-id="@Model.CodeRequest!.Id">Request New Remark</a>
+    <a asp-page="/CodeRequestRemarks/Create" asp-route-id="@Model.CodeRequest!.Id">Request New Remark</a><br />
 
     @if (Model.CodeRequest?.RequestState == CodeRequestStatus.Approved)
     {

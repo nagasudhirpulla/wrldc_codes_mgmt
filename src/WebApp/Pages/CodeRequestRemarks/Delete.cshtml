@@ -1,0 +1,24 @@
+﻿@page
+@model WebApp.Pages.CodeRequestRemarks.DeleteModel
+@{
+    ViewData["Title"] = "Delete Code Request Remarks";
+}
+
+@if (Model.CodeRequestRemark != null)
+{
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-10 col-lg-8 col-xl-6">
+            <h2>@ViewData["Title"]</h2>
+            <hr />
+            <h3>Are you sure you want to delete the code request Remark ?</h3>
+            <div>
+                <form asp-action="Delete">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input type="hidden" asp-for="CodeRequestRemark!.Id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" /> |
+                    <a asp-page="/CodeRequests/Edit" asp-route-id="@Model.CodeRequestRemark!.CodeRequestId">Back to Code Request Edit Page</a>
+                </form>
+            </div>
+        </div>
+    </div>
+}
