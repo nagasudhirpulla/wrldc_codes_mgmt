@@ -11,7 +11,9 @@ internal class CodeRequestStakeHolderConfiguration : IEntityTypeConfiguration<Co
 
         // many to many relationship in ef-core - https://www.entityframeworktutorial.net/efcore/configure-many-to-many-relationship-in-ef-core.aspx
         // https://www.learnentityframeworkcore.com/configuration/many-to-many-relationship-configuration
-        builder.HasKey(b => new { b.StakeholderId, b.CodeRequestId });
+        builder
+               .HasIndex(b => new { b.StakeholderId, b.CodeRequestId })
+               .IsUnique();
 
         builder
             .HasOne(rs => rs.CodeRequest)

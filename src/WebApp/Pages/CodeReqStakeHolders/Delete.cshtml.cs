@@ -1,16 +1,18 @@
 using Application.CodeRequestStakeholders.Commands.DeleteCodeReqStakeHolder;
 using Application.CodeRequestStakeholders.Queries.GetRawCodeReqStakeHolder;
+using Application.Users;
 using Core.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Extensions;
 
 namespace WebApp.Pages.CodeReqStakeHolders;
 
+[Authorize(Roles = SecurityConstants.AdminRoleString + "," + SecurityConstants.RldcRoleString)]
 public class DeleteModel : PageModel
 {
-    // TODO manual test this
     private readonly ILogger<DeleteModel> _logger;
     private readonly IMediator _mediator;
 

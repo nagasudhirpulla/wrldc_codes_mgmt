@@ -31,7 +31,7 @@ public class GetRawCodeReqStakeHolderQuery : IRequest<CodeRequestStakeHolder?>
         {
             // get list of user Ids associated with code request
             CodeRequestStakeHolder? crs = await _context.CodeRequestStakeHolders
-                                .Where(x => x.CodeRequestId == request.Id)
+                                .Where(x => x.Id == request.Id)
                                 .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
 

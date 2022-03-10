@@ -1,0 +1,22 @@
+﻿@page
+@model WebApp.Pages.CodeReqStakeHolders.CreateModel
+@{
+    ViewData["Title"] = "Add Code Request Stakeholder";
+}
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="NewStakeHolder.CodeRequestId" type="hidden" />
+                <label asp-for="NewStakeHolder.StakeholderId"></label>
+                <select asp-for="NewStakeHolder.StakeholderId" class="form-control" asp-items="Model.UnmappedStakeHolders"></select>
+                <span asp-validation-for="NewStakeHolder.StakeholderId" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success">Add Concerened StakeHolder</button>
+        </form>
+        <a asp-page="/CodeRequests/Edit" asp-route-id="@Model.NewStakeHolder.CodeRequestId">Back to Edit Page</a>
+    </div>
+</div>

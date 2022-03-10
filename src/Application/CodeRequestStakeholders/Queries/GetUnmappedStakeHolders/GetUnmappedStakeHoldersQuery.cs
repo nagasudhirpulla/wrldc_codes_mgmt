@@ -8,6 +8,11 @@ namespace Application.CodeRequestStakeholders.Queries.GetUnmappedStakeHolders;
 
 public class GetUnmappedStakeHoldersQuery : IRequest<List<ApplicationUser>>
 {
+    public GetUnmappedStakeHoldersQuery(int codeReqId)
+    {
+        CodeReqId = codeReqId;
+    }
+
     public int CodeReqId { get; set; }
 
     public class GetUnmappedStakeHoldersQueryHandler : IRequestHandler<GetUnmappedStakeHoldersQuery, List<ApplicationUser>>

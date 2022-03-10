@@ -112,10 +112,10 @@
     <ul>
         @foreach (var item in Model.CodeRequest!.ConcernedStakeholders)
         {
-            <li>@item.Stakeholder?.DisplayName | TODO link to page that deletes concerned stakeholder with id = @item.Id</li>
+            <li>@item.Stakeholder?.DisplayName | <a asp-page="/CodeReqStakeHolders/Delete" asp-route-id="@item.Id">Delete</a></li>
         }
     </ul>
-    TODO link to page that adds concerned stakeholder to code request
+    <a asp-page="/CodeReqStakeHolders/Create" asp-route-id="@Model.CodeRequest!.Id">Add Concerned StakeHolder</a>
 
     <h4>Consent Requests</h4>
     <ul>

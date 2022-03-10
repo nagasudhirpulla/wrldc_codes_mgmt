@@ -25,10 +25,6 @@ public class CreateModel : PageModel
     }
 
     //https://www.learnrazorpages.com/razor-pages/forms/select-lists
-    public SelectList DeptOptions { get; set; }
-    public SelectList DesigOptions { get; set; }
-    public SelectList GradeOptions { get; set; }
-    public SelectList BossOptions { get; set; }
     public SelectList URoles { get; set; }
 
     [BindProperty]

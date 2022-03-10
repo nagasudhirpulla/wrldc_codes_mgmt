@@ -24,11 +24,11 @@ public class GetCodeRequestByIdQuery : IRequest<CodeRequest?>
                  .Include(s => s.Requester)
                  .Include(s => s.ElementOwners)
                  .Include(s => s.ConcernedStakeholders)
-                 .ThenInclude(s => s.Stakeholder)
+                    .ThenInclude(s => s.Stakeholder)
                  .Include(s => s.ConsentRequests)
-                 .ThenInclude(s => s.Stakeholder)
+                    .ThenInclude(s => s.Stakeholder)
                  .Include(s => s.RemarksRequests)
-                 .ThenInclude(s => s.Stakeholder)
+                    .ThenInclude(s => s.Stakeholder)
                  .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
             return res;
