@@ -148,7 +148,7 @@
             </li>
         }
     </ul>
-    <span>TODO link to page that adds remarks request to code request</span><br />
+    <a asp-page="/CodeRequestRemarks/Create" asp-route-id="@Model.CodeRequest!.Id">Request New Remark</a>
 
     @if (Model.CodeRequest?.RequestState == CodeRequestStatus.Approved)
     {

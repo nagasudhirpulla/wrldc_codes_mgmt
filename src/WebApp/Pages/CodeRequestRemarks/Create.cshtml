@@ -1,0 +1,25 @@
+﻿@page
+@model WebApp.Pages.CodeRequestRemarks.CreateModel
+@{
+    ViewData["Title"] = "Add Code Request Stakeholder";
+}
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="NewRemark.CodeRequestId" type="hidden" />
+                <label asp-for="NewRemark.StakeholderId"></label>
+                <select asp-for="NewRemark.StakeholderId" class="form-control" asp-items="Model.AllStakeHolders"></select>
+                <span asp-validation-for="NewRemark.StakeholderId" class="text-danger"></span>
+                <label asp-for="NewRemark.RldcRemarks"></label>
+                 <input asp-for="NewRemark.RldcRemarks" class="form-control" />
+                <span asp-validation-for="NewRemark.RldcRemarks" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success">Place Request for Remark</button>
+        </form>
+        <a asp-page="/CodeRequests/Edit" asp-route-id="@Model.NewRemark.CodeRequestId">Back to Edit Page</a>
+    </div>
+</div>
