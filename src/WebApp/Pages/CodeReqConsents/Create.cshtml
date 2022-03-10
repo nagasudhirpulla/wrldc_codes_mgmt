@@ -1,0 +1,27 @@
+﻿@page
+@model WebApp.Pages.CodeReqConsents.CreateModel
+@{
+    ViewData["Title"] = "Add Code Request Consent";
+}
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="NewConsent.CodeRequestId" type="hidden" />
+                <label asp-for="NewConsent.StakeholderId"></label>
+                <select asp-for="NewConsent.StakeholderId" class="form-control" asp-items="Model.ConsentLists"></select>
+                <span asp-validation-for="NewConsent.StakeholderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewConsent.RldcRemarks"></label>
+                <input asp-for="NewConsent.RldcRemarks" class="form-control" />
+                <span asp-validation-for="NewConsent.RldcRemarks" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success">Add Concerned Consent</button>
+        </form>
+        <a asp-page="/CodeRequests/Edit" asp-route-id="@Model.NewConsent.CodeRequestId">Back to Edit Page</a>
+    </div>
+</div>

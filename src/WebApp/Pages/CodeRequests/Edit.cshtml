@@ -127,12 +127,12 @@
                     <span>RLDC remarks = @item.RldcRemarks</span><br />
                     <span>Stakeholder remarks = @item.Remarks</span><br />
                     <span>Consent status = @item.ApprovalStatus.Name, updated at @item.ApprovalStatusChangedAt.ToString("dd-MMM-yyyy HH:mm")</span><br />
-                    <span>TODO link to page that deletes the consent request page</span><br />
+                    <span>@item.Stakeholder?.DisplayName | <a asp-page="/CodeReqConsents/Delete" asp-route-id="@item.Id">Delete</a></span><br />
                 </div>
             </li>
         }
     </ul>
-    <span>TODO link to page that adds consent request to code request</span>
+    <a asp-page="/CodeReqConsents/Create" asp-route-id="@Model.CodeRequest!.Id">Add Concerned Consent</a>
 
     <h4>Remarks Requests</h4>
     <ul>
