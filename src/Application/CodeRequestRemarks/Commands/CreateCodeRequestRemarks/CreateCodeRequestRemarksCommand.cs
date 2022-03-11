@@ -19,5 +19,4 @@ public class CreateCodeRequestRemarksCommand :IRequest<List<string>>, IMapFrom<C
         profile.CreateMap<CodeRequestRemark, CreateCodeRequestRemarksCommand>()
             .ReverseMap();
     }
-    // TODO create command and hanlder
 }

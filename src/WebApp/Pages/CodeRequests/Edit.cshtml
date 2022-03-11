@@ -9,105 +9,106 @@
     <dl class="row">
         @if (!string.IsNullOrWhiteSpace(Model.CodeRequest?.ElementName))
         {
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Element
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @($"{Model.CodeRequest?.ElementName}, Type = {Model.CodeRequest?.ElementType}")
             </dd>
 
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Element Owners
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @string.Join(",", Model.CodeRequest?.ElementOwners.Select(x=>x.OwnerName).ToList()!)
             </dd>
         }
         @if (!string.IsNullOrWhiteSpace(Model.CodeRequest?.OutageType))
         {
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Outage Type
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @Model.CodeRequest?.OutageType
             </dd>
 
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Outage Tag
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @Model.CodeRequest?.OutageTag
             </dd>
         }
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Description
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.Description
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Remarks
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.Remarks
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Code Type
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.CodeType?.Name
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Requester
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.Requester?.DisplayName
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Created At
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.Created.ToString("dd-MMM-yyyy HH:mm")
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Created By
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @Model.CodeRequest?.CreatedBy
         </dd>
 
-        <dt class="col-sm-2">
+        <dt class="col-sm-3">
             Request State
         </dt>
-        <dd class="col-sm-10">
+        <dd class="col-sm-9">
             @($"{Model.CodeRequest?.RequestState.Value}, last changed at {Model.CodeRequest?.RequestStatusChangedAt.ToString("dd-MMM-yyyy HH:mm")}")
         </dd>
 
         @if (Model.CodeRequest?.DesiredExecutionStartTime != null)
         {
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Desired Execution Start Time
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @Model.CodeRequest?.DesiredExecutionStartTime?.ToString("dd-MMM-yyyy HH:mm")
             </dd>
         }
         @if (Model.CodeRequest?.DesiredExecutionEndTime != null)
         {
-            <dt class="col-sm-2">
+            <dt class="col-sm-3">
                 Desired Execution End Time
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-9">
                 @Model.CodeRequest?.DesiredExecutionEndTime?.ToString("dd-MMM-yyyy HH:mm")
             </dd>
         }
     </dl>
+    <hr />
     <h4>Concerened Stakeholders</h4>
     <ul>
         @foreach (var item in Model.CodeRequest!.ConcernedStakeholders)
@@ -117,46 +118,48 @@
     </ul>
     <a asp-page="/CodeReqStakeHolders/Create" asp-route-id="@Model.CodeRequest!.Id">Add Concerned StakeHolder</a>
 
+    <hr />
     <h4>Consent Requests</h4>
     <ul>
         @foreach (var item in Model.CodeRequest!.ConsentRequests)
         {
             <li>
                 <div>
-                    <span>Stakeholder = @item.Stakeholder?.DisplayName</span><br />
-                    <span>RLDC remarks = @item.RldcRemarks</span><br />
-                    <span>Stakeholder remarks = @item.Remarks</span><br />
-                    <span>Consent status = @item.ApprovalStatus.Name, updated at @item.ApprovalStatusChangedAt.ToString("dd-MMM-yyyy HH:mm")</span><br />
-                    <span>@item.Stakeholder?.DisplayName | <a asp-page="/CodeReqConsents/Delete" asp-route-id="@item.Id">Delete</a></span><br />
+                    <p>Stakeholder = @item.Stakeholder?.DisplayName</p>
+                    <p>RLDC remarks = @item.RldcRemarks</p>
+                    <p>Stakeholder remarks = @(item.Remarks??"Pending")</p>
+                    <p>Consent status = @item.ApprovalStatus.Name, updated at @item.ApprovalStatusChangedAt.ToString("dd-MMM-yyyy HH:mm")</p>
+                    <p><a asp-page="/CodeReqConsents/Delete" asp-route-id="@item.Id">Delete</a></p>
                 </div>
             </li>
         }
     </ul>
-    <a asp-page="/CodeReqConsents/Create" asp-route-id="@Model.CodeRequest!.Id">Add Concerned Consent</a>
+    <a asp-page="/CodeReqConsents/Create" asp-route-id="@Model.CodeRequest!.Id">Add Consent Request</a>
 
+    <hr />
     <h4>Remarks Requests</h4>
     <ul>
         @foreach (var item in Model.CodeRequest!.RemarksRequests)
         {
             <li>
                 <div>
-                    <span>Stakeholder = @item.Stakeholder?.DisplayName</span><br />
-                    <span>RLDC remarks = @item.RldcRemarks</span><br />
-                    <span>Stakeholder remarks = @item.Remarks</span><br />
-                    <span>@item.Stakeholder?.DisplayName | <a asp-page="/CodeRequestRemarks/Delete" asp-route-id="@item.Id">Delete</a></span><br />
+                    <p>Stakeholder = @item.Stakeholder?.DisplayName</p>
+                    <p>RLDC remarks = @item.RldcRemarks</p>
+                    <p>Stakeholder remarks = @(item.Remarks??"Pending")</p>
+                    <p><a asp-page="/CodeRequestRemarks/Delete" asp-route-id="@item.Id">Delete</a></p>
                 </div>
             </li>
         }
     </ul>
-    <a asp-page="/CodeRequestRemarks/Create" asp-route-id="@Model.CodeRequest!.Id">Request New Remark</a><br />
-
+    <a asp-page="/CodeRequestRemarks/Create" asp-route-id="@Model.CodeRequest!.Id">Add New Remarks Request</a><br />
+    <hr />
     @if (Model.CodeRequest?.RequestState == CodeRequestStatus.Approved)
     {
-        <span>Form action that dis-approves the code request</span>
+        <span>TODO Form action button that dis-approves the code request</span>
     }
     else
     {
-        <span>Form action that approves the code request</span>
+        <span>TODO Form action button that approves the code request</span>
     }
 
     <br />

@@ -78,7 +78,6 @@ public class CreateOutageRevivalCodeRequestCommandHandler : IRequestHandler<Crea
             return errs;
         }
 
-        // TODO complete this
         // create new code request entity from command
         CodeRequest newCodeReq = _mapper.Map<CodeRequest>(request);
 

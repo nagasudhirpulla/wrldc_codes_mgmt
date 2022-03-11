@@ -9,7 +9,6 @@ namespace Application.CodeRequestConsents.Commands.CreateCodeReqConsent;
 
 public class CreateCodeReqConsentCommand : IRequest<List<string>>, IMapFrom<CodeRequestConsent>
 {
-    // TODO complete command and hanlder
     public string? StakeholderId { get; set; }
     public int CodeRequestId { get; set; }
     public string? RldcRemarks { get; set; }
