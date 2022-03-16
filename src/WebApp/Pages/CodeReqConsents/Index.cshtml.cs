@@ -17,7 +17,7 @@ public class IndexModel : PageModel
     private readonly IMediator _mediator;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public IList<CodeRequestConsent> ReqList { get; set; } = new List<CodeRequestConsent>();
+    public IList<CodeRequestConsent> ConsentRequests { get; set; } = new List<CodeRequestConsent>();
 
     public IndexModel(ILogger<IndexModel> logger, IMediator mediator, ICurrentUserService currentUserService, UserManager<ApplicationUser> userManager)
     {
@@ -51,7 +51,7 @@ public class IndexModel : PageModel
 
     private async Task PopulateReqListAsync()
     {
-        List<CodeRequestConsent> codeReqs = await _mediator.Send(Query);
+        List<CodeRequestConsent> consentReqs = await _mediator.Send(Query);
 
         string? usrId = _currentUserService.UserId;
         ApplicationUser curUsr = await _userManager.FindByIdAsync(usrId);
@@ -60,13 +60,13 @@ public class IndexModel : PageModel
         if (isUsrAdminOrRldc)
         {
             // get all code requests if the user is admin
-            ReqList = codeReqs;
+            ConsentRequests = consentReqs;
         }
         else
         {
             // filter the requests concerened with the logged in user
             // criteria is that the logged in user is either concerened stakeholder or requester
-            ReqList = codeReqs.Where(x => x.StakeholderId == usrId)
+            ConsentRequests = consentReqs.Where(x => x.StakeholderId == usrId)
                             .ToList();
         }
     }

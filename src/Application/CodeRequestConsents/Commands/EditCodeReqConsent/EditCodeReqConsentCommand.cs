@@ -14,8 +14,6 @@ public class EditCodeReqConsentCommand : IRequest<List<string>>, IMapFrom<CodeRe
 {
     public int Id { get; set; }
     public string? Remarks { get; set; }
-    public string? RldcRemarks { get; set; }
-
 
     public ApprovalStatus ApprovalStatus { get; set; }
     public void Mapping(Profile profile)

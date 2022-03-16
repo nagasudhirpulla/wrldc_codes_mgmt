@@ -5,6 +5,7 @@ using Infra;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using WebApp.Services;
+using WebApp.SmartEnum.ModelBinding;
 
 namespace WebApp;
 public class Startup
@@ -26,7 +27,11 @@ public class Startup
         services.AddApplication();
         services.AddInfrastructure(Configuration, Environment);
         services.AddRazorPages()
-            .AddMvcOptions(o => o.Filters.Add(new AuthorizeFilter()));
+            .AddMvcOptions(o =>
+            {
+                o.Filters.Add(new AuthorizeFilter());
+                o.ModelBinderProviders.Insert(0, new SmartEnumBinderProvider());
+            });
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

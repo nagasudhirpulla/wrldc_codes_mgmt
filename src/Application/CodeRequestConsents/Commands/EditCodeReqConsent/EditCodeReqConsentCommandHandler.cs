@@ -25,25 +25,27 @@ public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConse
     public async Task<List<string>> Handle(EditCodeReqConsentCommand request, CancellationToken cancellationToken)
     {
         List<string> errs = new();
-        var crconsent = await _context.CodeRequestConsents
+        var consentReq = await _context.CodeRequestConsents
                  .Where(s => s.Id == request.Id)
                  .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        if (crconsent == null)
+        if (consentReq == null)
         {
-            errs.Add("Approved Outage Request Id not valid");
+            errs.Add("Consent Request Id not valid");
             return errs;
 
         }
+        // TODO check if user is the remarks stakeholder or admin
+
         bool isEditRequired = false;
-        if (crconsent.Remarks != request.Remarks || crconsent.ApprovalStatus != request.ApprovalStatus)
+        if (consentReq.Remarks != request.Remarks || consentReq.ApprovalStatus != request.ApprovalStatus)
         {
             isEditRequired = true;
         }
         if (isEditRequired)
         {
-            crconsent.Remarks = request.Remarks;
-            crconsent.ApprovalStatus = request.ApprovalStatus;
-
+            // TODO perform approval status modification validation (like consent approval status cannot be changed after code request approval or disapproval)
+            consentReq.Remarks = request.Remarks;
+            consentReq.ApprovalStatus = request.ApprovalStatus;
             try
             {
 
@@ -53,7 +55,7 @@ public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConse
             {
                 if (!_context.CodeRequestConsents.Any(e => e.Id == request.Id))
                 {
-                    return new List<string>() { $"Employee Dept History Id {request.Id} not present for editing" };
+                    return new List<string>() { $"Consent Request Id {request.Id} not present for editing" };
                 }
                 else
                 {

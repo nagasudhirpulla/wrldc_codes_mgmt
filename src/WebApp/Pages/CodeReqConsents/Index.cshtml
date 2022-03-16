@@ -19,7 +19,7 @@
     </div>
 </div>
 
-@if (Model != null && Model.ReqList != null && Model.ReqList.Count > 0)
+@if (Model != null && Model.ConsentRequests != null && Model.ConsentRequests.Count > 0)
 {
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-12">
@@ -40,14 +40,14 @@
                         <th>Desired End</th>
                         @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
                             {
-                                <th>Consent Sent to Stakeholders</th>
+                                <th>Consent Request Sent to</th>
                             }
                         @*<th>Concerned Stakeholders</th>*@
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var req in Model.ReqList)
+                    @foreach (var req in Model.ConsentRequests)
                     {
                         <tr>
                             <td>@req.RldcRemarks</td>
@@ -73,7 +73,7 @@
                             }
                             else
                             {
-                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Response</a> </td>
+                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Respond</a> </td>
                             }
                         </tr>
                     }
@@ -94,7 +94,7 @@
                         <th>Desired End</th>
                         @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
                             {
-                                <th>Consent Sent to Stakeholders</th>
+                                <th>Consent Request Sent to</th>
                             }
                         @*<th>Concerned Stakeholders</th>*@
                         <th>Actions</th>

@@ -31,13 +31,13 @@ public class GetCodeRequestConsentsBetweenDatesQuery : IRequest<List<CodeRequest
         {
             DateTime startDt = new(request.StartDate.Year, request.StartDate.Month, request.StartDate.Day);
             DateTime endDt = new(request.EndDate.Year, request.EndDate.Month, request.EndDate.Day, 23, 59, 59);
-            List<CodeRequestConsent> reqList = await _context.CodeRequestConsents
+            List<CodeRequestConsent> consentRequests = await _context.CodeRequestConsents
                 .Where(s => (s.Created >= startDt && s.Created <= endDt))
                 .Include(s => s.CodeRequest)
                 .Include(s => s.Stakeholder)
                 .ToListAsync(cancellationToken: cancellationToken);
 
-            return reqList;
+            return consentRequests;
         }
     }
 }

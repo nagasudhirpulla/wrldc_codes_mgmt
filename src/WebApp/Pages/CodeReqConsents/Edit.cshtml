@@ -2,7 +2,7 @@
 @using Core.Enums
 @model WebApp.Pages.CodeReqConsents.EditModel
 @{
-    ViewData["Title"] = "Edit Code Request Consent";
+    ViewData["Title"] = "Edit Consent Request";
 }
 <div class="container">
     <div class="row justify-content-center align-items-center">
@@ -11,25 +11,26 @@
             <form method="post">
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
+                <input asp-for="ConsentRequest.Id" type="hidden" />
                 <div class="form-group">
-                    <input asp-for="CodeRequestConsent.Id" type="hidden" />
-                    <label asp-for="CodeRequestConsent.ApprovalStatus"></label>
-                    <select asp-for="CodeRequestConsent.ApprovalStatus" class="form-control" asp-items="@(new SelectList(ApprovalStatus.List, "Value", "Name"))"></select>
-                    <span asp-validation-for="CodeRequestConsent.ApprovalStatus" class="text-danger"></span>
+                    <label asp-for="ConsentRequest.ApprovalStatus"></label>
+                    <select asp-for="ConsentRequest.ApprovalStatus" class="form-control">
+                        @foreach (var item in ApprovalStatus.List)
+                        {
+                            <option value="@item.Name" selected="@(item.Name == Model.ConsentRequest.ApprovalStatus.Name)">@item.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ConsentRequest.ApprovalStatus" class="text-danger"></span>
                 </div>
+
                 <div class="form-group">
-                    <label asp-for="CodeRequestConsent.RldcRemarks"></label>
-                    <input asp-for="CodeRequestConsent.RldcRemarks" class="form-control" readonly />
-                    <span asp-validation-for="CodeRequestConsent.RldcRemarks" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="CodeRequestConsent.Remarks"></label>
-                    <input asp-for="CodeRequestConsent.Remarks" class="form-control" />
-                    <span asp-validation-for="CodeRequestConsent.Remarks" class="text-danger"></span>
+                    <label asp-for="ConsentRequest.Remarks"></label>
+                    <input asp-for="ConsentRequest.Remarks" class="form-control" />
+                    <span asp-validation-for="ConsentRequest.Remarks" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-success">Approve Consent</button>
             </form>
-            <a asp-page="/CodeReqConsents/Index">Back to Edit Page</a>
+            <a asp-page="./Index">Back to Edit Page</a>
         </div>
     </div>
 </div>
