@@ -1,0 +1,167 @@
+﻿@page
+@using Application.Users
+@model WebApp.Pages.CodeReqConsents.IndexModel
+@{
+    ViewData["Title"] = "Manage Code Request Consents";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-8 col-lg-8 col-xl-6">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <label asp-for="Query.StartDate"></label>
+            <input asp-for="Query.StartDate" type="date" />
+            <label asp-for="Query.EndDate" class="ms-3"></label>
+            <input asp-for="Query.EndDate" type="date" />
+            <button type="submit" class="btn btn-primary ms-3">Load Code Requests</button>
+        </form>
+    </div>
+</div>
+
+@if (Model != null && Model.ReqList != null && Model.ReqList.Count > 0)
+{
+    <div class="row justify-content-center align-items-center">
+        <div class="col col-md-12">
+            <hr />
+            <table class="table table-bordered table-hover display" id="display_table">
+                <thead>
+                    <tr>
+                        <th>Rldc Remarks</th>
+                        <th>Response</th>
+                        <th>Approval Status</th>
+                        <th>Created</th>
+                        <th>Code Request State</th>
+                        <th>Element</th>
+                        <th>Code Type</th>
+                        <th>Description</th>
+                        <th>Remarks</th>
+                        <th>Desired Start</th>
+                        <th>Desired End</th>
+                        @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            {
+                                <th>Consent Sent to Stakeholders</th>
+                            }
+                        @*<th>Concerned Stakeholders</th>*@
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in Model.ReqList)
+                    {
+                        <tr>
+                            <td>@req.RldcRemarks</td>
+                            <td>@req.Remarks</td>
+                            <td>@req.ApprovalStatus</td>
+                            <td>@req.Created.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@req.CodeRequest.RequestState?.Name</td>
+                            <td>@req.CodeRequest.ElementName</td>
+                            <td>@req.CodeRequest.CodeType</td>
+                            <td>@req.CodeRequest.Description</td>
+                            <td>@req.CodeRequest.Remarks</td>
+                            <td>@req.CodeRequest.DesiredExecutionStartTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@req.CodeRequest.DesiredExecutionEndTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                            @*<td>@(string.Join(",",req.ConcernedStakeholders.Select(x=>x.DisplayName)))</td>*@
+                            @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            {
+                                <td>@req.Stakeholder.DisplayName</td>
+
+                            }
+                            @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            {
+                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Edit</a> | <a asp-page="./Delete" asp-route-id="@req.Id">Delete</a></td>
+                            }
+                            else
+                            {
+                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Response</a> </td>
+                            }
+                        </tr>
+                    }
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Rldc Remarks</th>
+                        <th>Response</th>
+                        <th>Approval Status</th>
+                        <th>Created</th>
+                        <th>Code Request State</th>
+                        <th>Element</th>
+                        <th>Code Type</th>
+                        <th>Description</th>
+                        <th>Remarks</th>
+                        <th>Desired Start</th>
+                        <th>Desired End</th>
+                        @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            {
+                                <th>Consent Sent to Stakeholders</th>
+                            }
+                        @*<th>Concerned Stakeholders</th>*@
+                        <th>Actions</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+
+    @section Scripts{
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" href="~/js/node_modules/datatables.net-buttons-dt/css/buttons.dataTables.min.css" />
+<script src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="~/js/node_modules/datatables.net-buttons/js/buttons.print.min.js"></script>
+<script src="~/js/node_modules/jszip/dist/jszip.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/pdfmake.min.js"></script>
+<script src="~/js/node_modules/pdfmake/build/vfs_fonts.js"></script>
+<script src="~/js/node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+<script>
+    function strtrunc(str, max, add) {
+        add = add || '...';
+        return (typeof str === 'string' && str.length > max ? str.substring(0, max) + add : str);
+    };
+    $(document).ready(function () {
+        // https://datatables.net/examples/api/multi_filter.html
+        // Setup - add a text input to each footer cell
+        $('#display_table tfoot th').each(function () {
+            //var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search" />');
+        });
+        var display_table = $('#display_table').DataTable({
+            fixedHeader: true,
+            "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            "order": [[0, "asc"]],
+            buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']
+        });
+        var r = $('#display_table tfoot tr');
+        r.find('th').each(function () {
+            $(this).css('padding', '3px');
+        });
+        $('#display_table thead').append(r);
+        // Apply the filter
+        // https://www.jqueryscript.net/demo/DataTables-Jquery-Table-Plugin/examples/api/multi_filter.html
+        $("#display_table thead input").on('keyup change', function () {
+            display_table
+                .column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+        });
+    });
+</script>
+<style>
+    thead input {
+        padding: 2px;
+        box-sizing: border-box;
+        font-size: small;
+        width: 100%
+    }
+</style>
+    }
+}
