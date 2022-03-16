@@ -14,7 +14,6 @@ public class EditCodeRequestRemarksCommand : IRequest<List<string>>, IMapFrom<Co
 {
     public int Id { get; set; }
     public string? Remarks { get; set; }
-    public string? RldcRemarks { get; set; }
     public void Mapping(Profile profile)
     {
         profile.CreateMap<CodeRequestRemark, EditCodeRequestRemarksCommand>()

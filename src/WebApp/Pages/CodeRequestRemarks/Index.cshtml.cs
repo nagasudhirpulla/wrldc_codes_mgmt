@@ -29,6 +29,7 @@ public class IndexModel : PageModel
 
     [BindProperty]
     public GetCodeRequestRemarksBetweenDatesQuery Query { get; set; } = new() { StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date };
+    
     public async Task OnGetAsync()
     {
         await PopulateReqListAsync();
@@ -51,7 +52,7 @@ public class IndexModel : PageModel
 
     private async Task PopulateReqListAsync()
     {
-        List<CodeRequestRemark> codeRemarks = await _mediator.Send(Query);
+        List<CodeRequestRemark> remarksRequests = await _mediator.Send(Query);
 
         string? usrId = _currentUserService.UserId;
         ApplicationUser curUsr = await _userManager.FindByIdAsync(usrId);
@@ -60,13 +61,13 @@ public class IndexModel : PageModel
         if (isUsrAdminOrRldc)
         {
             // get all code requests if the user is admin
-            ReqList = codeRemarks;
+            ReqList = remarksRequests;
         }
         else
         {
             // filter the requests concerened with the logged in user
             // criteria is that the logged in user is either concerened stakeholder or requester
-            ReqList = codeRemarks.Where(x => x.StakeholderId == usrId)
+            ReqList = remarksRequests.Where(x => x.StakeholderId == usrId)
                             .ToList();
         }
     }

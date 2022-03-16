@@ -28,15 +28,20 @@ public class EditCodeRequestRemarksCommandHandler : IRequestHandler<EditCodeRequ
     public async Task<List<string>> Handle(EditCodeRequestRemarksCommand request, CancellationToken cancellationToken)
     {
         
-        var crremarks = await _context.CodeRequestRemarks.Where(coderemark => coderemark.Id == request.Id).FirstOrDefaultAsync(cancellationToken);
-        if (crremarks == null)
+        var crRemarks = await _context.CodeRequestRemarks
+            .Where(coderemark => coderemark.Id == request.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+        if (crRemarks == null)
         {
             string errorMsg = $"Code Remark Id {request.Id} not present for editing";
             return new List<string>() { errorMsg };
         }
-        if (crremarks.Remarks != request.Remarks )
+
+        // TODO check if user is the remarks stakeholder or admin
+
+        if (crRemarks.Remarks != request.Remarks )
         {
-            crremarks.Remarks = request.Remarks;
+            crRemarks.Remarks = request.Remarks;
         }
 
         try
@@ -47,7 +52,7 @@ public class EditCodeRequestRemarksCommandHandler : IRequestHandler<EditCodeRequ
         {
             if (!_context.CodeRequestRemarks.Any(e => e.Id == request.Id))
             {
-                return new List<string>() { $"Order Id {request.Id} not present for editing" };
+                return new List<string>() { $"Code Remark Id {request.Id} not present for editing" };
             }
             else
             {

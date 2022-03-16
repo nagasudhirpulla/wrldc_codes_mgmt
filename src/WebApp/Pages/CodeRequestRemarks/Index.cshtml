@@ -39,9 +39,9 @@
                         <th>Desired End</th>
                         <th>Element Owners</th>
                         @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
-                            {
-                               <th>Code Request Remarks Send to</th>
-                            }
+                        {
+                            <th>Remarks Request Sent to</th>
+                        }
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -60,9 +60,9 @@
                             <td>@req.CodeRequest.DesiredExecutionStartTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@req.CodeRequest.DesiredExecutionEndTime?.ToString("yyyy-MM-dd HH:mm")</td>
                             <td>@(string.Join(",",req.CodeRequest.ElementOwners.Select(x=>x.OwnerName)))</td>
-                             @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                            @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
                             {
-                               <td>@req.Stakeholder.DisplayName</td>
+                                <td>@req.Stakeholder.DisplayName</td>
                             }
                             @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
                             {
@@ -70,7 +70,7 @@
                             }
                             else
                             {
-                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Response</a></td>
+                                <td><a asp-page="./Edit" asp-route-id="@req.Id">Respond</a></td>
                             }
                         </tr>
                     }
@@ -89,10 +89,10 @@
                         <th>Desired Start</th>
                         <th>Desired End</th>
                         <th>Element Owners</th>
-                         @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
-                            {
-                               <th>Code Request Remarks Send to</th>
-                            }
+                        @if (User.IsInRole(SecurityConstants.AdminRoleString) || User.IsInRole(SecurityConstants.RldcRoleString))
+                        {
+                            <th>Remarks Request Sent to</th>
+                        }
                         <th>Actions</th>
                     </tr>
                 </tfoot>
