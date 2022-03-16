@@ -1,0 +1,32 @@
+﻿@page
+@using Core.Enums
+@model WebApp.Pages.CodeRequestRemarks.EditModel
+@{
+    ViewData["Title"] = "Edit Code Request Remark";
+}
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-4 col-lg-4 col-xl-3">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CodeRequestRemark.RldcRemarks" class="control-label required-field">Rldc Remarks</label>
+                <input asp-for="CodeRequestRemark.RldcRemarks" class="form-control " readonly />
+                <span asp-validation-for="CodeRequestRemark.RldcRemarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CodeRequestRemark.Remarks"></label>
+                <input asp-for="CodeRequestRemark.Remarks" class="form-control" />
+                <span asp-validation-for="CodeRequestRemark.Remarks" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="CodeRequestRemark.Id" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+        <div>
+        <a asp-page="./Index">Back to List</a>
+    </div>
+    </div>
+</div>
+
