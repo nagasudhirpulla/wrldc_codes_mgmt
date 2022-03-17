@@ -8,6 +8,7 @@
     <div class="row justify-content-center align-items-center">
         <div class="col col-md-4 col-lg-4 col-xl-3">
             <h2>@ViewData["Title"]</h2>
+            <p>RLDC Remarks - @Model.RLDCRemarks</p>
             <form method="post">
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
@@ -17,7 +18,10 @@
                     <select asp-for="ConsentRequest.ApprovalStatus" class="form-control">
                         @foreach (var item in ApprovalStatus.List)
                         {
-                            <option value="@item.Name" selected="@(item.Name == Model.ConsentRequest.ApprovalStatus.Name)">@item.Name</option>
+                            @if (item.Name != ApprovalStatus.Pending.Name)
+                            {
+                                <option value="@item.Name" selected="@(item.Name == Model.ConsentRequest.ApprovalStatus.Name)">@item.Name</option>
+                            }
                         }
                     </select>
                     <span asp-validation-for="ConsentRequest.ApprovalStatus" class="text-danger"></span>
@@ -28,7 +32,7 @@
                     <input asp-for="ConsentRequest.Remarks" class="form-control" />
                     <span asp-validation-for="ConsentRequest.Remarks" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn btn-success">Approve Consent</button>
+                <button type="submit" class="btn btn-success">Submit</button>
             </form>
             <a asp-page="./Index">Back to Edit Page</a>
         </div>

@@ -19,6 +19,7 @@ public class EditModel : PageModel
     private readonly IMapper _mapper;
     [BindProperty]
     public EditCodeReqConsentCommand? ConsentRequest { get; set; }
+    public string? RLDCRemarks { get; set; }
 
     public EditModel(IMediator mediator, IMapper mapper)
     {
@@ -27,9 +28,13 @@ public class EditModel : PageModel
     }
     public async Task<IActionResult> OnGetAsync(int id)
     {
-
-
-        ConsentRequest = _mapper.Map<EditCodeReqConsentCommand>( await _mediator.Send(new GetRawCodeReqConsentQuery(id)));
+        CodeRequestConsent? consentReq = await _mediator.Send(new GetRawCodeReqConsentQuery(id));
+        if (consentReq == null)
+        {
+            return NotFound();
+        }
+        RLDCRemarks = consentReq!.RldcRemarks;
+        ConsentRequest = _mapper.Map<EditCodeReqConsentCommand>(consentReq);
         if (ConsentRequest == null)
         {
             return NotFound();
@@ -49,7 +54,12 @@ public class EditModel : PageModel
         {
             return RedirectToPage("./Index", new { }).WithSuccess("Code Request consent added");
         }
-
+        CodeRequestConsent? consentReq = await _mediator.Send(new GetRawCodeReqConsentQuery(ConsentRequest.Id));
+        if (consentReq == null)
+        {
+            return NotFound();
+        }
+        RLDCRemarks = consentReq!.RldcRemarks;
         foreach (var error in errs!)
         {
             ModelState.AddModelError(string.Empty, error);

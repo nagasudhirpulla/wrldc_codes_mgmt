@@ -30,6 +30,7 @@ public class GetCodeRequestRemarksBetweenDatesQuery : IRequest<List<CodeRequestR
             List<CodeRequestRemark> reqList = await _context.CodeRequestRemarks
                 .Where(s => s.Created >= startDt && s.Created <= endDt)
                 .Include(s => s.CodeRequest)
+                //.ThenInclude(c => c.ElementOwners)
                 .Include(s => s.Stakeholder)
                 .OrderByDescending(x => x.Created)
                 .ToListAsync(cancellationToken: cancellationToken);

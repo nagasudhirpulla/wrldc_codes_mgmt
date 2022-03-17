@@ -26,14 +26,18 @@ public class EditModel : PageModel
 
     [BindProperty]
     public EditCodeRequestRemarksCommand? CodeRequestRemark { get; set; }
-    
+
+    public string? RLDCRemarks { get; set; }
+
     public async Task<IActionResult> OnGetAsync(int id)
     {
-        CodeRequestRemark = _mapper.Map<EditCodeRequestRemarksCommand>(await _mediator.Send(new GetRawCodeRequestRemarkQuery(id)));
-        if (CodeRequestRemark == null)
+        CodeRequestRemark? remarksReq = await _mediator.Send(new GetRawCodeRequestRemarkQuery(id));
+        if (remarksReq == null)
         {
             return NotFound();
         }
+        CodeRequestRemark = _mapper.Map<EditCodeRequestRemarksCommand>(remarksReq);
+        RLDCRemarks = remarksReq!.RldcRemarks;
 
         return Page();
     }
@@ -48,8 +52,15 @@ public class EditModel : PageModel
 
         if (errs != null && errs.Count == 0)
         {
-            return RedirectToPage("./Index", new { }).WithSuccess("Code Request Remark edited");
+            return RedirectToPage("./Index").WithSuccess("Code Request Remark edited");
         }
+
+        CodeRequestRemark? remarksReq = await _mediator.Send(new GetRawCodeRequestRemarkQuery(CodeRequestRemark.Id));
+        if (remarksReq == null)
+        {
+            return NotFound();
+        }
+        RLDCRemarks = remarksReq!.RldcRemarks;
 
         foreach (var error in errs!)
         {
@@ -58,5 +69,4 @@ public class EditModel : PageModel
 
         return Page();
     }
-
 }

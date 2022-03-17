@@ -7,6 +7,7 @@
 <div class="row justify-content-center align-items-center">
     <div class="col col-md-4 col-lg-4 col-xl-3">
         <h2>@ViewData["Title"]</h2>
+        <p>RLDC Remarks - @Model.RLDCRemarks</p>
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
@@ -20,8 +21,8 @@
             </div>
         </form>
         <div>
-        <a asp-page="./Index">Back to List</a>
-    </div>
+            <a asp-page="./Index">Back to List</a>
+        </div>
     </div>
 </div>
 
