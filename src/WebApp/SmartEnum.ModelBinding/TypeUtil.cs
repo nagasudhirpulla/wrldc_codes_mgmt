@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebApp.SmartEnum.ModelBinding;
+﻿namespace WebApp.SmartEnum.ModelBinding;
 
 internal static class TypeUtil
 {

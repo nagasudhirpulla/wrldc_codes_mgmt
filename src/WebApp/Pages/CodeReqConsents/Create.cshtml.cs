@@ -1,7 +1,5 @@
 using Application.CodeRequestConsents.Commands.CreateCodeReqConsent;
-using Application.CodeRequestConsents.Queries.GetUnmappedConsents;
 using Application.Users.Queries.GetAppUsers;
-using Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

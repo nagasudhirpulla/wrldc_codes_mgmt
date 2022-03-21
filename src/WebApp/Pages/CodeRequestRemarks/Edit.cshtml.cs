@@ -1,10 +1,7 @@
 using Application.CodeRequestRemarks.Queries.GetRawCodeRequestRemark;
 using Application.CodeRequestRemarks.Commands.EditCodeRequestRemarks;
-using Application.CodeRequests.Queries.GetCodeRequestById;
-using Application.Users;
 using Core.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AutoMapper;

@@ -7,11 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.CodeRequestConsents.Commands.EditCodeReqConsent;
 public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConsentCommand, List<string>>
@@ -48,51 +43,34 @@ public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConse
         var isUsrAdminOrRldc = (await _userManager.GetRolesAsync(curUsr))
                                 .Any(x => new List<string>() { SecurityConstants.AdminRoleString, SecurityConstants.RldcRoleString }.Contains(x));
 
-        bool isStakeholderOrAdmin = false;
-        if ((consentReq.StakeholderId == curUsrId) || (isUsrAdminOrRldc))
-        {
-            isStakeholderOrAdmin = true;
-        }
-        if (!isStakeholderOrAdmin)
+        if (!((consentReq.StakeholderId == curUsrId) || isUsrAdminOrRldc))
         {
             return new List<string>() { $"User is not allowed to edit this Consent Request Id {request.Id}" };
         }
 
-        bool isCodeReqPending = false;
-        if (consentReq.CodeRequest.RequestState != CodeRequestStatus.DisApproved || consentReq.CodeRequest.RequestState != CodeRequestStatus.Approved)
+        // check if action taken already on code request
+        bool isCodeReqActionTaken = new List<CodeRequestStatus> { CodeRequestStatus.DisApproved, CodeRequestStatus.Approved }.Contains(consentReq.CodeRequest!.RequestState);
+        if (isCodeReqActionTaken)
         {
-            isCodeReqPending = true;
+            return new List<string>() { $"Code request of Consent Request Id {request.Id} is already approved or dis-approved" };
         }
 
-        if (!isCodeReqPending)
+        // edit the consent request
+        consentReq.Remarks = request.Remarks;
+        consentReq.ApprovalStatus = request.ApprovalStatus;
+        try
         {
-            return new List<string>() { $"Code request for Consent Request Id {request.Id} is already approved or dis-approved" };
+            await _context.SaveChangesAsync(cancellationToken);
         }
-
-        bool isEditRequired = false;
-        if (consentReq.Remarks != request.Remarks || consentReq.ApprovalStatus != request.ApprovalStatus)
+        catch (DbUpdateConcurrencyException)
         {
-            isEditRequired = true;
-        }
-        if (isEditRequired)
-        {
-            consentReq.Remarks = request.Remarks;
-            consentReq.ApprovalStatus = request.ApprovalStatus;
-            try
+            if (!_context.CodeRequestConsents.Any(e => e.Id == request.Id))
             {
-
-                await _context.SaveChangesAsync(cancellationToken);
+                return new List<string>() { $"Consent Request Id {request.Id} not present for editing" };
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!_context.CodeRequestConsents.Any(e => e.Id == request.Id))
-                {
-                    return new List<string>() { $"Consent Request Id {request.Id} not present for editing" };
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
         }
         return errs;

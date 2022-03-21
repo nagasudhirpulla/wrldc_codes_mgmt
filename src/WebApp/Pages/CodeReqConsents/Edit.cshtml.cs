@@ -1,11 +1,8 @@
 using Application.CodeRequestConsents.Commands.EditCodeReqConsent;
 using Application.CodeRequestConsents.Queries.GetRawCodeReqConsent;
-using Application.CodeRequests.Queries.GetCodeRequestById;
-using Application.Users;
 using AutoMapper;
 using Core.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebApp.Extensions;

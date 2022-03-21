@@ -2,8 +2,6 @@
 using AutoMapper;
 using MediatR;
 using static Application.Common.Mappings.MappingProfile;
-using System;
-using Core.Enums;
 
 namespace Application.CodeRequestConsents.Commands.CreateCodeReqConsent;
 
