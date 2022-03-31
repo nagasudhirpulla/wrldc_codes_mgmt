@@ -14,7 +14,7 @@ using WebApp.Extensions;
 using Application.ReportingData.Queries.GetStakeholders;
 using Application.UserStakeHolders.Queries.GetUserStakeholders;
 using Core.ReportingData;
-using Application.ReportingData.Queries.GetReportingOwners;
+using Application.ReportingData.Queries.GetOwners;
 using Application.UserElementOwners.Queries.GetUserElementOwners;
 
 namespace WebApp.Pages.Users;

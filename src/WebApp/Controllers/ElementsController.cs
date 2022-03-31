@@ -1,4 +1,4 @@
-﻿using Application.ReportingData.Queries.GetElementForDisplay;
+﻿using Application.ReportingData.Queries.ElementsForDisplay;
 using Core.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
