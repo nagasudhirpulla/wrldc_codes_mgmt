@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 
 namespace Core.ReportingData;
 
@@ -24,7 +24,7 @@ public interface IReportingDataService
     ReportingOutage? GetLatestOutageById(int outageId);
 
 
-
+    List<ElementType> GetElementTypes();
     List<ReportingBay> GetAllBays();
     List<ReportingBus> GetAllBuses();
     List<ReportingBusReactor> GetAllBusReactors();

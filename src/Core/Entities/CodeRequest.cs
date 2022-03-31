@@ -40,9 +40,9 @@ public class CodeRequest : AuditableEntity
 
     public int? OutageTagId { get; set; }
     public string? OutageTag { get; set; }
-
+    //for approved outage
     public int? OutageRequestId { get; set; }
-    
+    //for already created outage like revival outage
     public int? OutageId { get; set; }
 
     public DateTime? DesiredExecutionStartTime { get; set; }

@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -54,8 +54,8 @@ internal class GetAllBaysQuery
         while (reader.Read())
         {
             ReportingBay? bay = new();
-            bay.BayId = DbUtils.SafeGetInt(reader, "ID");
-            bay.BayName = DbUtils.SafeGetString(reader, "BAY_NAME");
+            bay.Id = DbUtils.SafeGetInt(reader, "ID");
+            bay.Name = DbUtils.SafeGetString(reader, "BAY_NAME");
             //Bay number is string
             bay.BayNumber = DbUtils.SafeGetString(reader, "BAY_NUMBER");
             bay.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");

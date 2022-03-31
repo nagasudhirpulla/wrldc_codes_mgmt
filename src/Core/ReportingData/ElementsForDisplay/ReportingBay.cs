@@ -1,9 +1,9 @@
-﻿namespace Core.ReportingData.GetElementsForDisplay;
+﻿namespace Core.ReportingData.ElementsForDisplay;
 
 public class ReportingBay
 {
-    public int BayId  { get; set; }
-    public string BayName { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; }
     public string BayNumber { get; set; }
     public string SubstationName { get; set; }
     public string Type { get; set; }

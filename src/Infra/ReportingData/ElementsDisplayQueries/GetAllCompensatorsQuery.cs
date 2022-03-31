@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -49,8 +49,8 @@ internal class GetAllCompensatorsQuery
         while (reader.Read())
         {
             ReportingCompensator? comp = new();
-            comp.CmpstrId = DbUtils.SafeGetInt(reader, "ID");
-            comp.TcscName = DbUtils.SafeGetString(reader, "TCSC_NAME");
+            comp.Id = DbUtils.SafeGetInt(reader, "ID");
+            comp.Name = DbUtils.SafeGetString(reader, "TCSC_NAME");
             comp.PercVarCmpstr = DbUtils.SafeGetInt(reader, "PERC_VARIABLE_COMPENSATION");
             comp.PercFxdCmpstr = DbUtils.SafeGetInt(reader, "PERC_FIXED_COMPENSATION");
             comp.Owners = DbUtils.SafeGetString(reader, "OWNERS");

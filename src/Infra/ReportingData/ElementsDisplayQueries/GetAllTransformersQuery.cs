@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -48,8 +48,8 @@ internal class GetAllTransformersQuery
         while (reader.Read())
         {
             ReportingTransformer? transformer = new();
-            transformer.TId = DbUtils.SafeGetInt(reader, "ID");
-            transformer.TransformerName = DbUtils.SafeGetString(reader, "TRANSFORMER_NAME");
+            transformer.Id = DbUtils.SafeGetInt(reader, "ID");
+            transformer.Name = DbUtils.SafeGetString(reader, "TRANSFORMER_NAME");
             transformer.MvaCapacity = DbUtils.SafeGetInt(reader, "MVA_CAPACITY");
             transformer.TypeGtIct = DbUtils.SafeGetInt(reader, "TYPE_GT_ICT");
             transformer.Owners = DbUtils.SafeGetString(reader, "OWNERS");

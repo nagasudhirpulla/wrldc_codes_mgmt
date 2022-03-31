@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -58,8 +58,8 @@ internal class GetAllTransmissionLineCktsQuery
         while (reader.Read())
         {
             ReportingTransmissionLineCkt? transLineCkt = new();
-            transLineCkt.CrktId = DbUtils.SafeGetInt(reader, "ID");
-            transLineCkt.LineCrktName = DbUtils.SafeGetString(reader, "LINE_CIRCUIT_NAME");
+            transLineCkt.Id = DbUtils.SafeGetInt(reader, "ID");
+            transLineCkt.Name = DbUtils.SafeGetString(reader, "LINE_CIRCUIT_NAME");
             transLineCkt.CrktNumber = DbUtils.SafeGetInt(reader, "CIRCUIT_NUMBER");
             transLineCkt.CrktLength = DbUtils.SafeGetInt(reader, "LENGTH");
             transLineCkt.LineVol = DbUtils.SafeGetString(reader, "VOLTAGE");

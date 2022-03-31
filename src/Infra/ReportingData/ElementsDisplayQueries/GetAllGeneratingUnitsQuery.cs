@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -51,8 +51,8 @@ internal class GetAllGeneratingUnitsQuery
         while (reader.Read())
         {
             ReportingGeneratingUnit? gu = new();
-            gu.GuId = DbUtils.SafeGetInt(reader, "ID");
-            gu.UnitName = DbUtils.SafeGetString(reader, "UNIT_NAME");
+            gu.Id = DbUtils.SafeGetInt(reader, "ID");
+            gu.Name = DbUtils.SafeGetString(reader, "UNIT_NAME");
             gu.UnitNumber = DbUtils.SafeGetInt(reader, "UNIT_NUMBER");
             gu.InstalledCapacity = DbUtils.SafeGetInt(reader, "INSTALLED_CAPACITY");
             gu.MVACapacity = DbUtils.SafeGetInt(reader, "MVA_CAPACITY");

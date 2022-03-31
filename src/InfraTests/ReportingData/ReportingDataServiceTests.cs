@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Core.ReportingData;
 using System;
-using Core.ReportingData.GetElementsForDisplay;
+using Core.ReportingData.ElementsForDisplay;
 
 namespace Infra.ReportingData.Tests;
 
@@ -127,5 +127,12 @@ public class ReportingDataServiceTests
     {
         List<ReportingCompensator> allCompensators = _reportingDataService.GetAllCompensators();
         Assert.IsTrue(allCompensators.Count > 0);
+    }
+
+    [TestMethod()]
+    public void GetElementTypesTest()
+    {
+        List<ElementType> elementtypes = _reportingDataService.GetElementTypes();
+        Assert.IsTrue(elementtypes.Count > 0);
     }
 }

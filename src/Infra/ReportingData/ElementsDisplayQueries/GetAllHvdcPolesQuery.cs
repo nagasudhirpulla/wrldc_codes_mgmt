@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -56,8 +56,8 @@ internal class GetAllHvdcPolesQuery
         while (reader.Read())
         {
             ReportingHvdcPole? hvdcPole = new();
-            hvdcPole.HVDCPId = DbUtils.SafeGetInt(reader, "ID");
-            hvdcPole.PoleName = DbUtils.SafeGetString(reader, "POLE_NAME");
+            hvdcPole.Id = DbUtils.SafeGetInt(reader, "ID");
+            hvdcPole.Name = DbUtils.SafeGetString(reader, "POLE_NAME");
             hvdcPole.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
             hvdcPole.Voltage = DbUtils.SafeGetString(reader, "VOLTAGE");
             hvdcPole.Owners = DbUtils.SafeGetString(reader, "OWNERS");

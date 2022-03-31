@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -56,8 +56,8 @@ internal class GetAllHvdcLineCktsQuery
         while (reader.Read())
         {
             ReportingHvdcLineCkt? hvdcLineCkt = new();
-            hvdcLineCkt.HlcId = DbUtils.SafeGetInt(reader, "ID");
-            hvdcLineCkt.HlcName = DbUtils.SafeGetString(reader, "LINE_CIRCUIT_NAME");
+            hvdcLineCkt.Id = DbUtils.SafeGetInt(reader, "ID");
+            hvdcLineCkt.Name = DbUtils.SafeGetString(reader, "LINE_CIRCUIT_NAME");
             hvdcLineCkt.HlcNumber = DbUtils.SafeGetInt(reader, "CIRCUIT_NO");
             hvdcLineCkt.LineVoltage = DbUtils.SafeGetString(reader, "VOLTAGE");
             hvdcLineCkt.Owners = DbUtils.SafeGetString(reader, "OWNERS");

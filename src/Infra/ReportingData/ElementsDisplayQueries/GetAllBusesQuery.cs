@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -51,8 +51,8 @@ internal class GetAllBusesQuery
         while (reader.Read())
         {
             ReportingBus? bus = new();
-            bus.BusId = DbUtils.SafeGetInt(reader, "ID");
-            bus.BusName = DbUtils.SafeGetString(reader, "BUS_NAME");
+            bus.Id = DbUtils.SafeGetInt(reader, "ID");
+            bus.Name = DbUtils.SafeGetString(reader, "BUS_NAME");
             bus.BusNumber = DbUtils.SafeGetInt(reader, "BUS_NUMBER");
             bus.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
             bus.Voltage = DbUtils.SafeGetString(reader, "VOLTAGE");

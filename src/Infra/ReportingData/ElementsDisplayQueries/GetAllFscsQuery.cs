@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -48,8 +48,8 @@ internal class GetAllFscsQuery
         while (reader.Read())
         {
             ReportingFsc? fsc = new();
-            fsc.FSCId = DbUtils.SafeGetInt(reader, "ID");
-            fsc.FSCName = DbUtils.SafeGetString(reader, "FSC_NAME");
+            fsc.Id = DbUtils.SafeGetInt(reader, "ID");
+            fsc.Name = DbUtils.SafeGetString(reader, "FSC_NAME");
             fsc.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
             fsc.Owners = DbUtils.SafeGetString(reader, "OWNERS");
             fsc.OwnerIds = DbUtils.SafeGetString(reader, "OWNER_IDS");

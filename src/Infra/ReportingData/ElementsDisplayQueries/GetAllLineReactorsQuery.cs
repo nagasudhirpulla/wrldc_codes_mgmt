@@ -1,4 +1,4 @@
-﻿using Core.ReportingData.GetElementsForDisplay;
+﻿using Core.ReportingData.ElementsForDisplay;
 using Oracle.ManagedDataAccess.Client;
 
 namespace Infra.ReportingData.ElementsDisplayQueries;
@@ -51,8 +51,8 @@ internal class GetAllLineReactorsQuery
         while (reader.Read())
         {
             ReportingLineReactor? lineReactor = new();
-            lineReactor.LrId = DbUtils.SafeGetInt(reader, "ID");
-            lineReactor.ReactorName = DbUtils.SafeGetString(reader, "REACTOR_NAME");
+            lineReactor.Id = DbUtils.SafeGetInt(reader, "ID");
+            lineReactor.Name = DbUtils.SafeGetString(reader, "REACTOR_NAME");
             lineReactor.MvarCapacity = DbUtils.SafeGetInt(reader, "MVAR_CAPACITY");
             lineReactor.SubstationName = DbUtils.SafeGetString(reader, "SUBSTATION_NAME");
             lineReactor.LineCrktName = DbUtils.SafeGetString(reader, "LINE_CIRCUIT_NAME");

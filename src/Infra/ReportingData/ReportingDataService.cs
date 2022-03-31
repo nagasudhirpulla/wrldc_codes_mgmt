@@ -1,10 +1,10 @@
 ﻿using Core.ReportingData;
-using Core.ReportingData.GetElementsForDisplay;
 using Infra.ReportingData.SingleElementOwnerQueries;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Oracle.ManagedDataAccess.Client;
 using Infra.ReportingData.ElementsDisplayQueries;
+using Core.ReportingData.ElementsForDisplay;
 
 namespace Infra.ReportingData;
 
@@ -527,5 +527,20 @@ public class ReportingDataService : IReportingDataService
             allCompensators = new();
         }
         return allCompensators;
+    }
+
+    public List<ElementType> GetElementTypes()
+    {
+        List<ElementType> elementtypes;
+        try
+        {
+            elementtypes = GetElementTypesQuery.Execute(_reportingConnStr);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            elementtypes = new();
+        }
+        return elementtypes;
     }
 }
