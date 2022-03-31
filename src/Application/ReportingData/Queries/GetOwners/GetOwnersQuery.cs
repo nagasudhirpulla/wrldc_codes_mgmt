@@ -1,7 +1,7 @@
 ﻿using Core.ReportingData;
 using MediatR;
 
-namespace Application.ReportingData.Queries.GetReportingOwners;
+namespace Application.ReportingData.Queries.GetOwners;
 
 
 public class GetOwnersQuery : IRequest<List<ReportingOwner>>
@@ -17,8 +17,8 @@ public class GetOwnersQuery : IRequest<List<ReportingOwner>>
 
         public async Task<List<ReportingOwner>> Handle(GetOwnersQuery request, CancellationToken cancellationToken)
         {
-            List<ReportingOwner> stakeholders = _reportingService.GetReportingOwners();
-            return await Task.FromResult(stakeholders);
+            List<ReportingOwner> owners = _reportingService.GetReportingOwners();
+            return await Task.FromResult(owners);
         }
     }
 }

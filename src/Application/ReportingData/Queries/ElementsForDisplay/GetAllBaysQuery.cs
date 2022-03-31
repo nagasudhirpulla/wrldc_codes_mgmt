@@ -2,7 +2,7 @@
 using Core.ReportingData.ElementsForDisplay;
 using MediatR;
 
-namespace Application.ReportingData.Queries.GetElementForDisplay;
+namespace Application.ReportingData.Queries.ElementsForDisplay;
 
 public class GetAllBaysQuery : IRequest<List<ReportingBay>>
 {

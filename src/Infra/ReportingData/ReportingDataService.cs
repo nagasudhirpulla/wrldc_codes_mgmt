@@ -44,7 +44,7 @@ public class ReportingDataService : IReportingDataService
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Error while fetching reporting data stakeholders, {msg}", ex.Message);
+                    _logger.LogError("Error while fetching reporting database stakeholders, {msg}", ex.Message);
                     stakeholders = new();
                 }
             }
@@ -60,7 +60,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting data owners, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting database owners, {msg}", ex.Message);
             owners = new();
         }
         return owners;
@@ -170,7 +170,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting element owners, {msg}", ex.Message);
             elementOwners = new();
         }
         return elementOwners;
@@ -184,7 +184,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting Transmission line ckt owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -198,7 +198,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting Bay owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -212,7 +212,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting Bus owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -226,7 +226,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting bus reactor owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -240,7 +240,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting Compensator owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -254,7 +254,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting FSC Owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -268,7 +268,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting Generating unit owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -282,7 +282,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting HVDC Line Ckt owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -296,7 +296,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting HVDC Pole owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -310,7 +310,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting line reactor owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -324,7 +324,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting transformer owners, {msg}", ex.Message);
             elementowners = new();
         }
         return elementowners;
@@ -339,7 +339,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting all un-revived outages, {msg}", ex.Message);
             unrevivedOutages = new();
         }
         return unrevivedOutages;
@@ -358,7 +358,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting outage by Id, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting latest outage by Id, {msg}", ex.Message);
             outage = null;
         }
         return outage;
@@ -373,7 +373,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting Bays, {msg}", ex.Message);
             allBays = new();
         }
         return allBays;
@@ -388,7 +388,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting Buses, {msg}", ex.Message);
             allBuses = new();
         }
         return allBuses;
@@ -403,7 +403,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting Bus reactors, {msg}", ex.Message);
             allBusReactors = new();
         }
         return allBusReactors;
@@ -418,7 +418,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting FSCs, {msg}", ex.Message);
             allFSCs = new();
         }
         return allFSCs;
@@ -433,7 +433,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting generating units, {msg}", ex.Message);
             allGeneratingUnits = new();
         }
         return allGeneratingUnits;
@@ -448,7 +448,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting HVDC Line ckts, {msg}", ex.Message);
             allHVDCLineCrkts = new();
         }
         return allHVDCLineCrkts;
@@ -463,7 +463,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting HVDC Poles, {msg}", ex.Message);
             allHVDCPoles = new();
         }
         return allHVDCPoles;
@@ -478,7 +478,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting line reactors, {msg}", ex.Message);
             allLineReactors = new();
         }
         return allLineReactors;
@@ -493,7 +493,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting transformers, {msg}", ex.Message);
             allTransformers = new();
         }
         return allTransformers;
@@ -508,7 +508,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting transmission line ckts, {msg}", ex.Message);
             allTransmissionLineCkts = new();
         }
         return allTransmissionLineCkts;
@@ -523,7 +523,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching all reporting compensators, {msg}", ex.Message);
             allCompensators = new();
         }
         return allCompensators;
@@ -538,7 +538,7 @@ public class ReportingDataService : IReportingDataService
         }
         catch (Exception ex)
         {
-            _logger.LogError("Error while fetching reporting approved outage requests for requester, {msg}", ex.Message);
+            _logger.LogError("Error while fetching reporting element types, {msg}", ex.Message);
             elementtypes = new();
         }
         return elementtypes;
