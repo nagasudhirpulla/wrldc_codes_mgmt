@@ -1,12 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Application.Users;
-using AutoMapper;
 using Core.Entities;
 using Core.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Application.CodeRequestConsents.Commands.EditCodeReqConsent;
 public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConsentCommand, List<string>>
