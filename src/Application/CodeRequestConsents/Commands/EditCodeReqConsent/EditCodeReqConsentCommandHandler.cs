@@ -11,16 +11,12 @@ using Microsoft.Extensions.Logging;
 namespace Application.CodeRequestConsents.Commands.EditCodeReqConsent;
 public class EditCodeReqConsentCommandHandler : IRequestHandler<EditCodeReqConsentCommand, List<string>>
 {
-    private readonly ILogger<EditCodeReqConsentCommandHandler> _logger;
-    private readonly IMapper _mapper;
     private readonly IAppDbContext _context;
     private readonly ICurrentUserService _currentUserService;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public EditCodeReqConsentCommandHandler(ILogger<EditCodeReqConsentCommandHandler> logger, IMapper mapper, IAppDbContext context, ICurrentUserService currentUserService, UserManager<ApplicationUser> userManager)
+    public EditCodeReqConsentCommandHandler(IAppDbContext context, ICurrentUserService currentUserService, UserManager<ApplicationUser> userManager)
     {
-        _logger = logger;
-        _mapper = mapper;
         _context = context;
         _currentUserService = currentUserService;
         _userManager = userManager;
