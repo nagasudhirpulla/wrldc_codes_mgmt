@@ -9,7 +9,7 @@
         <h2>@ViewData["Title"]</h2>
         <div class="form-group">
             <span>Select element type - </span>
-            <select id="elTypesSelect" onchange="onElTypeChange()" class="form-control" >
+            <select id="elTypesSelect" onchange="onElTypeChange()" class="form-control">
                 @foreach (var item in Model.ElementTypesOptions)
                 {
                     <option value="@item.Value">@item.Text</option>
@@ -20,34 +20,34 @@
         <table id="displayTable" class="display table table-striped table-bordered table-hover table-responsive w-auto">
             <thead></thead>
         </table>
-        <br/>
+        <br />
         <form method="post">
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-                <input asp-for="NewReq.ElementId" type="hidden" />
-                <input asp-for="NewReq.ElementName" type="hidden" />
-                <input asp-for="NewReq.ElementTypeId" type="hidden" />
-                <input asp-for="NewReq.ElementType" type="hidden" />
+            <input asp-for="NewReq.ElementId" type="hidden" />
+            <input asp-for="NewReq.ElementName" type="hidden" />
+            <input asp-for="NewReq.ElementTypeId" type="hidden" />
+            <input asp-for="NewReq.ElementType" type="hidden" />
 
-                <h4><span>Selected Element = </span><span id="selElemDisplaySpan">--Please select from above table--</span></h4>
-                <div class="form-group">
+            <h4><span>Selected Element = </span><span id="selElemDisplaySpan">--Please select from above table--</span></h4>
+            <div class="form-group">
                 <label asp-for="NewReq.Description"></label>
                 <input asp-for="NewReq.Description" class="form-control" />
                 <span asp-validation-for="NewReq.Description" class="text-danger"></span>
             </div>
-             <div class="form-group">
-               <label asp-for="NewReq.DesiredExecutionStartTime"></label>
-                <input asp-for="NewReq.DesiredExecutionStartTime" type="date" class="form-control" />
+            <div class="form-group">
+                <label asp-for="NewReq.DesiredExecutionStartTime"></label>
+                <input asp-for="NewReq.DesiredExecutionStartTime" class="form-control datetimepicker" />
                 <span asp-validation-for="NewReq.DesiredExecutionStartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-               <label asp-for="NewReq.DesiredExecutionEndTime"></label>
-                <input asp-for="NewReq.DesiredExecutionEndTime" type="date" class="form-control" />
+                <label asp-for="NewReq.DesiredExecutionEndTime"></label>
+                <input asp-for="NewReq.DesiredExecutionEndTime" class="form-control datetimepicker" />
                 <span asp-validation-for="NewReq.DesiredExecutionEndTime" class="text-danger"></span>
             </div>
-                <button type="submit" class="btn btn-success">Create Element Outage Code Request</button>
-            </form>
+            <button type="submit" class="btn btn-success">Create Element Outage Code Request</button>
+        </form>
     </div>
 </div>
 <br />
@@ -55,6 +55,7 @@
 <link rel="stylesheet" type="text/css" href="~/js/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" type="text/css" href="~/js/node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css">
 <link rel="stylesheet" href="~/css/datatables/fixedHeader.dataTables.min.css" />
+<link rel="stylesheet" type="text/css" href="~/js/node_modules/flatpickr/dist/flatpickr.min.css">
 <script type="application/javascript" src="~/js/node_modules/datatables.net/js/jquery.dataTables.min.js"></script>
 <script type="application/javascript" src="~/js/node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script type="application/javascript" src="~/js/node_modules/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
@@ -69,13 +70,20 @@
 <link rel="stylesheet" type="text/css" href="~/css/datatables/select.bootstrap5.min.css">
 <script type="application/javascript" src="~/js/node_modules/datatables.net-select/js/dataTables.select.min.js"></script>
 
+<script src="~/js/node_modules/flatpickr/dist/flatpickr.min.js"></script>
+
 @*<link rel="stylesheet" href="{{ url_for('static', filename='jquery_ui/jquery-ui.css">
-            <script src="{{ url_for('static', filename='jquery_ui/jquery-ui.js"></script>*@
+                    <script src="{{ url_for('static', filename='jquery_ui/jquery-ui.js"></script>*@
 
 
 <script type="application/javascript">
         var selectedElemInfo_g = null;
         var elsFetchBaseUrl_g = "../api/scadadata/, elType=''";
+        $(".datetimepicker").flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altFormat: "Y-m-d H:i"
+        });
         jQuery(document).ready(function($) {
 
         });
@@ -139,14 +147,14 @@
                 //TODO check if resp is non null and an array
                 if (true) {
                     var elemsList = resp;
-                    
+
                     console.log(elemsList);
-                    
+
                     if (elemsList.length > 0) {
                         // populate elements table only if number of elements > 0
                         var colNames = Object.keys(elemsList[0]);
-                        
-                        
+
+
                         // move element name column to first
                         var elNameInd = colNames.indexOf("name");
                         if (elNameInd >= 0) {

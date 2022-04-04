@@ -38,6 +38,7 @@ public class CreateElementOutageCodeRequestCommandHandler : IRequestHandler<Crea
         newCodeReq.RequestState = CodeRequestStatus.Requested;
         // set logged in user as the requester
         newCodeReq.RequesterId = curUsrId;
+
         string? elType = request.ElementType;
         int elId = request.ElementId;
 

@@ -8,6 +8,7 @@ using FluentValidation.Results;
 using FluentValidation.AspNetCore;
 using Application.ReportingData.Queries.GetElementTypes;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Core.ReportingData;
 
 namespace WebApp.Pages.OutageRequests;
 
@@ -29,7 +30,6 @@ public class CreateElementOutageReqModel : PageModel
     public async Task OnGet()
     {
         await InitSelectListItems();
-        int a = 1;
     }
     public async Task<IActionResult> OnPostAsync()
     {
@@ -59,6 +59,8 @@ public class CreateElementOutageReqModel : PageModel
     }
     public async Task InitSelectListItems()
     {
-        ElementTypesOptions = new SelectList(await _mediator.Send(new GetElementTypesQuery()), "Id", "Name");
+        List<ElementType> selOptions = await _mediator.Send(new GetElementTypesQuery());
+        selOptions.Insert(0, new ElementType() { Id = 0, Name = "--Select--" });
+        ElementTypesOptions = new SelectList(selOptions, "Id", "Name");
     }
 }
