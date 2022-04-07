@@ -1,8 +1,18 @@
+using Application;
+using Application.Common.Interfaces;
 using Core.ReportingData;
+using Infra;
 using Infra.ReportingData;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplication();
+//TODO complete this
+builder.Configuration.AddUserSecrets(typeof(WebApp.Startup).GetTypeInfo().Assembly);
+builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,6 +35,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 builder.Services.AddTransient<IReportingDataService, ReportingDataService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 var app = builder.Build();
 
