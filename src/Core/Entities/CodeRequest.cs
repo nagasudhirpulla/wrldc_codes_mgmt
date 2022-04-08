@@ -45,6 +45,9 @@ public class CodeRequest : AuditableEntity
     //for already created outage like revival outage
     public int? OutageId { get; set; }
 
+    // code string if a code is created for this request
+    public string? Code { get; set; }
+
     public DateTime? DesiredExecutionStartTime { get; set; }
     public DateTime? DesiredExecutionEndTime { get; set; }
 
