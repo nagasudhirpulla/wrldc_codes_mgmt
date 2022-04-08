@@ -28,4 +28,13 @@ public class CodeRequestsController : ControllerBase
         GetCodeReqs = await _mediator.Send(new GetCodeRequestsBetweenDatesQuery() { StartDate = startDate, EndDate = endDate });
         return GetCodeReqs;
     }
+
+    [BasicAuth]
+    [HttpPost("updateCode")]
+    public async Task<bool> UpdateCodeRequestAsync()
+    {
+        // TODO complete this
+        // TODO create a mediatr command for this request
+        return await Task.FromResult(false);
+    }
 }
