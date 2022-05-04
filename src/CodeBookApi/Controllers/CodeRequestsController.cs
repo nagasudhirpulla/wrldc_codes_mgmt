@@ -28,7 +28,18 @@ public class CodeRequestsController : ControllerBase
         DateTime startDate = DateTime.ParseExact(startDt ?? "", format, CultureInfo.InvariantCulture);
         DateTime endDate = DateTime.ParseExact(endDt ?? "", format, CultureInfo.InvariantCulture);
         List<CodeRequestDTO> codeReqs = await _mediator.Send(new GetCodeRequestsBetweenDatesQuery() { StartDate = startDate, EndDate = endDate });
+
         codeReqs = codeReqs.Where(c => c.RequestState != CodeRequestStatus.Approved && c.RequestState != CodeRequestStatus.DisApproved).ToList();
+
+        // convert list of stakeholders in string
+        //string str = string.Empty;
+        foreach (var item in codeReqs)
+        {
+            string str = string.Empty;
+            str = String.Join(",", item.ConcernedStakeholders);
+            
+        }
+            
         return codeReqs;
     }
 
