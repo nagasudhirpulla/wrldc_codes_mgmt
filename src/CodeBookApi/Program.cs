@@ -15,7 +15,11 @@ builder.Configuration.AddUserSecrets(typeof(WebApp.Startup).GetTypeInfo().Assemb
 builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // https://stackoverflow.com/questions/70436689/net-jsonserializer-does-not-serialize-tuples-values
+    options.JsonSerializerOptions.IncludeFields = true;
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
