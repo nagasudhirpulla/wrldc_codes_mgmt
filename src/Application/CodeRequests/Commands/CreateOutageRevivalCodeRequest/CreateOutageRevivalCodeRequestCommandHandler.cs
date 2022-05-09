@@ -40,6 +40,7 @@ public class CreateOutageRevivalCodeRequestCommandHandler : IRequestHandler<Crea
         if (outage == null)
         {
             errs.Add("Outage Id not valid");
+            return errs;
         }
 
         string? curUsrId = _currentUserService.UserId;
@@ -58,6 +59,7 @@ public class CreateOutageRevivalCodeRequestCommandHandler : IRequestHandler<Crea
             if (!isElOwnerLinked)
             {
                 errs.Add("Atleast one element owner of the outage element is not linked to this logged in user");
+                return errs;
             }
         }
 
@@ -67,6 +69,7 @@ public class CreateOutageRevivalCodeRequestCommandHandler : IRequestHandler<Crea
         if (isElRevived)
         {
             errs.Add("Element is already revived");
+            return errs;
         }
 
         // check if a outage revival code request (which is not dis-approved) is already generated for this outage ID
