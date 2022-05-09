@@ -39,7 +39,7 @@ public class CreateElementOutageReqModel : PageModel
 
         if (!ModelState.IsValid)
         {
-
+            await InitSelectListItems();
             return Page();
         }
 
@@ -55,6 +55,7 @@ public class CreateElementOutageReqModel : PageModel
             ModelState.AddModelError(string.Empty, error);
         }
 
+        await InitSelectListItems();
         return Page();
     }
     public async Task InitSelectListItems()

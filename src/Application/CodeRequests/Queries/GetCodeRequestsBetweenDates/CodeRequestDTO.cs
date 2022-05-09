@@ -30,7 +30,7 @@ public class CodeRequestDTO : IMapFrom<CodeRequest>
 
     public int? OutageTagId { get; set; }
     public string? OutageTag { get; set; }
-
+    public int? OutageId { get; set; }
     public int? OutageRequestId { get; set; }
 
     public DateTime? DesiredExecutionStartTime { get; set; }
