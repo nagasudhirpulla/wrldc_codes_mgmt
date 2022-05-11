@@ -12,6 +12,7 @@ public class CodeRequestDTO : IMapFrom<CodeRequest>
     public DateTime Created { get; set; }
     public CodeType? CodeType { get; set; }
     public CodeRequestStatus? RequestState { get; set; }
+    public string? Code { get; set; }
 
     public string? Requester { get; set; }
     public string? RequesterId { get; set; }
